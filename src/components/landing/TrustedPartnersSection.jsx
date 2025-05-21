@@ -1,0 +1,64 @@
+import React from "react";
+
+const TrustedPartnersSection = () => {
+  const partners = [
+    {
+      id: 1,
+      logo: "https://placehold.co/400x150",
+    },
+    {
+      id: 2,
+      logo: "https://placehold.co/400x150",
+    },
+    {
+      id: 3,
+      logo: "https://placehold.co/400x150",
+    },
+    {
+      id: 4,
+      logo: "https://placehold.co/400x150",
+    },
+    {
+      id: 5,
+      logo: "https://placehold.co/400x150",
+    },
+    {
+      id: 6,
+      logo: "https://placehold.co/400x150",
+    },
+  ];
+
+  return (
+    <section className="min-h-screen flex items-center justify-center bg-white py-16 border-t border-gray-200">
+      <div className="container mx-auto px-6 text-center">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-indigo-900">
+          Our Valued Collaborators
+        </h2>
+        <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-4xl mx-auto">
+          We partner with industry leaders to bring you cutting-edge AI image
+          generation technology. These collaborations enhance our platform's
+          capabilities, ensuring high-quality outputs and innovative features
+          for all users.
+        </p>
+        <div className="grid grid-cols-6 gap-6 mb-8">
+          {partners.slice(0, 6).map((partner) => (
+            <img
+              src="https://placehold.co/400x150"
+              alt={partner.name}
+              className="h-20 object-contain mb-2 opacity-70 hover:opacity-100 transition duration-300"
+            />
+          ))}
+        </div>
+        <div className="flex justify-center items-center text-gray-600 mt-8 text-lg gap-2">
+          <p className="font-medium">Over</p>
+          <span className="bg-indigo-600 text-white px-3 py-1 rounded-lg">
+            500,000+
+          </span>
+          <p className="font-medium">Designs Created with Deezii</p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default TrustedPartnersSection;
