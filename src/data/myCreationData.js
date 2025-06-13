@@ -1,0 +1,38 @@
+export const myCreationData = [
+  {
+    id: 1,
+    title: "Marketing Poster",
+    date: "2024-06-01",
+    image: "https://placehold.co/400x300",
+    description: "A modern marketing poster for a new product launch.",
+    tags: ["poster", "marketing", "product"],
+    createdAt: "2024-06-01",
+  },
+  {
+    id: 2,
+    title: "Business Logo",
+    date: "2024-05-28",
+    image: "https://placehold.co/400x300",
+    description: "Logo design for a business consulting firm.",
+    tags: ["logo", "business", "consulting"],
+    createdAt: "2024-05-28",
+  },
+  {
+    id: 3,
+    title: "Instagram Story",
+    date: "2024-05-20",
+    image: "https://placehold.co/400x300",
+    description: "A vibrant Instagram story template for promotions.",
+    tags: ["social", "instagram", "story"],
+    createdAt: "2024-05-20",
+  },
+  {
+    id: 4,
+    title: "Event Banner",
+    date: "2024-05-15",
+    image: "https://placehold.co/400x300",
+    description: "Banner for a local tech event.",
+    tags: ["banner", "event", "tech"],
+    createdAt: "2024-05-15",
+  },
+];

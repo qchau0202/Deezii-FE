@@ -8,3 +8,11 @@ body {
   color: var(--outer-space);
   font-family: "Lexend", sans-serif;
 }
+
+/* Masonry column fix for react-masonry-css */
+.masonry-column {
+  background-clip: padding-box;
+}
+.masonry-column > div {
+  margin-bottom: 24px; /* matches gap-6 */
+}
