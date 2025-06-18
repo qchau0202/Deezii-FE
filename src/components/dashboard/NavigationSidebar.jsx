@@ -13,10 +13,10 @@ import {
   BsCollection,
   BsGrid3X3,
   BsBookmark,
-  BsGear,
   BsQuestionCircle,
   BsPerson,
 } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 const NavigationSidebar = ({ selectedItem, onNavigate }) => {
   const [isProfileMenuVisible, setIsProfileMenuVisible] = useState(false);
@@ -43,7 +43,7 @@ const NavigationSidebar = ({ selectedItem, onNavigate }) => {
       <div>
         <div className="flex items-center mb-8">
           <BsStars className="text-indigo-600 mr-2" size={24} />
-          <h1 className="text-xl font-bold text-indigo-900">Deezii</h1>
+          <Link to="/" className="text-xl font-bold text-indigo-900">Deezii</Link>
         </div>
 
         {/* Main Features */}

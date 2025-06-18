@@ -2,6 +2,8 @@ import React from "react";
 import { ConfigProvider } from "antd";
 import { RouterProvider } from "react-router-dom";
 import router from "./routes";
+import { AuthProvider } from "./contexts/AuthContext";
+import { LanguageProvider } from "./contexts/LanguageContext";
 
 const App = () => {
   return (
@@ -12,7 +14,11 @@ const App = () => {
         },
       }}
     >
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <LanguageProvider>
+          <RouterProvider router={router} />
+        </LanguageProvider>
+      </AuthProvider>
     </ConfigProvider>
   );
 };

@@ -1,6 +1,10 @@
 import React from "react";
+import { useLanguage } from "../../contexts/LanguageContext";
+import languages from "../../config/languages";
 
 const TrustedPartnersSection = () => {
+  const { lang } = useLanguage();
+  const t = languages[lang].landing.trustedPartners;
   const partners = [
     {
       id: 1,
@@ -29,32 +33,33 @@ const TrustedPartnersSection = () => {
   ];
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-white py-16 border-t border-gray-200">
+    <section
+      id="collaboration-section"
+      className="min-h-screen flex items-center justify-center bg-white py-16 border-t border-gray-200"
+    >
       <div className="container mx-auto px-6 text-center">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-indigo-900">
-          Our Valued Collaborators
+          {t.title}
         </h2>
         <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-4xl mx-auto">
-          We partner with industry leaders to bring you cutting-edge AI image
-          generation technology. These collaborations enhance our platform's
-          capabilities, ensuring high-quality outputs and innovative features
-          for all users.
+          {t.description}
         </p>
         <div className="grid grid-cols-6 gap-6 mb-8">
           {partners.slice(0, 6).map((partner) => (
             <img
-              src="https://placehold.co/400x150"
+              key={partner.id}
+              src={partner.logo}
               alt={partner.name}
               className="h-20 object-contain mb-2 opacity-70 hover:opacity-100 transition duration-300"
             />
           ))}
         </div>
         <div className="flex justify-center items-center text-gray-600 mt-8 text-lg gap-2">
-          <p className="font-medium">Over</p>
+          <p className="font-medium">{t.over}</p>
           <span className="bg-indigo-600 text-white px-3 py-1 rounded-lg">
             500,000+
           </span>
-          <p className="font-medium">Designs Created with Deezii</p>
+          <p className="font-medium">{t.designsCreated}</p>
         </div>
       </div>
     </section>

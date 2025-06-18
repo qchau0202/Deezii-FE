@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Button, Tooltip, Avatar, Modal, Input } from "antd";
+import { Button, Tooltip, Avatar, Modal } from "antd";
 import {
   DownloadOutlined,
   DeleteOutlined,
   EyeOutlined,
 } from "@ant-design/icons";
-import { motion } from "framer-motion";
 import { myCreationData } from "../../data/myCreationData";
 import Masonry from "react-masonry-css";
 import {
@@ -13,28 +12,8 @@ import {
   MdOutlineRemoveRedEye,
   MdOutlineFavoriteBorder,
   MdOutlineShare,
-  MdOutlineSearch,
-  MdOutlineFilterList,
-  MdOutlineSort,
 } from "react-icons/md";
-import { FilterOutlined, SortAscendingOutlined } from "@ant-design/icons";
-
-const gridVariants = {
-  animate: {
-    transition: {
-      staggerChildren: 0.08,
-    },
-  },
-};
-
-const cardVariants = {
-  initial: { opacity: 0, y: 24 },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.35, ease: "easeOut" },
-  },
-};
+import { useNavigate } from "react-router-dom";
 
 const breakpointColumnsObj = {
   default: 4,
@@ -44,6 +23,7 @@ const breakpointColumnsObj = {
 };
 
 const MyCreationsSection = () => {
+  const navigate = useNavigate();
   const creations = myCreationData;
   const [modalOpen, setModalOpen] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -52,9 +32,15 @@ const MyCreationsSection = () => {
     setSelected(item);
     setModalOpen(true);
   };
+
   const closeModal = () => {
     setModalOpen(false);
     setSelected(null);
+  };
+
+  const handleEdit = (imageId) => {
+    closeModal();
+    navigate(`/dashboard/edit/${imageId}`);
   };
 
   return (
@@ -66,14 +52,14 @@ const MyCreationsSection = () => {
             {creations.length} items
           </span>
         </div>
-        <motion.div variants={gridVariants} initial="initial" animate="animate">
+        <div>
           <Masonry
             breakpointCols={breakpointColumnsObj}
             className="flex gap-6"
             columnClassName="masonry-column"
           >
             {creations.map((item) => (
-              <motion.div key={item.id} variants={cardVariants}>
+              <div key={item.id}>
                 <div className="relative group rounded-xl overflow-hidden cursor-pointer mb-6">
                   <img
                     src={item.image}
@@ -91,10 +77,10 @@ const MyCreationsSection = () => {
                     <MdOutlineMoreHoriz className="text-xl text-indigo-700" />
                   </button>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </Masonry>
-        </motion.div>
+        </div>
         {creations.length === 0 && (
           <div className="text-center text-gray-400 mt-16 text-lg">
             No creations yet.
@@ -175,6 +161,17 @@ const MyCreationsSection = () => {
                       {tag}
                     </span>
                   ))}
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    className="bg-indigo-900 text-white px-4 py-2 rounded-md hover:bg-indigo-800 transition-colors"
+                    onClick={() => handleEdit(selected.id)}
+                  >
+                    Edit
+                  </button>
+                  <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors">
+                    Share
+                  </button>
                 </div>
               </div>
             </div>
