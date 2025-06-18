@@ -1,16 +1,20 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Input, Button, Tooltip } from "antd";
 import { BsArrowLeft, BsStars } from "react-icons/bs";
 import { SendOutlined } from "@ant-design/icons";
 import { MdAttachFile } from "react-icons/md";
 import { tagOptions } from "../../data/tagData";
+import { useLanguage } from "../../contexts/LanguageContext";
+import languages from "../../config/languages";
 
 const GenerationSection = () => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [showPrompt, setShowPrompt] = useState(false);
   const [prompt, setPrompt] = useState("");
+  const { lang } = useLanguage();
+  const t = languages[lang].dashboard.generation;
 
   const getTagLabel = (tag) => {
     // Try to find the label in the parent options
@@ -23,20 +27,20 @@ const GenerationSection = () => {
 
   // Get the question for the current step, inserting parent label if needed
   const getCurrentQuestion = () => {
-    if (currentStep === 0) return tagOptions.type.title;
-    const parentTag = selectedTags[currentStep - 1];
-    const parentLabel = getTagLabel(parentTag);
-    let question = tagOptions[parentTag]?.title || tagOptions.type.title;
-    // Replace {parent} placeholder if present
-    if (question.includes("{parent}")) {
-      question = question.replace("{parent}", parentLabel);
-    } else if (currentStep === 1 && parentLabel) {
-      // For step 2, if not present, try to append parentLabel in a natural way
-      if (!question.toLowerCase().includes(parentLabel.toLowerCase())) {
-        question = question.replace(/\?$/, " of " + parentLabel + "?");
-      }
+    const key = currentStep === 0 ? "type" : selectedTags[currentStep - 1];
+    // Try to get the localized question from t.questions
+    if (t.questions && t.questions[key]) {
+      return t.questions[key];
     }
-    return question;
+    // fallback to English if not found
+    if (languages.en.dashboard.generation.questions[key]) {
+      return languages.en.dashboard.generation.questions[key];
+    }
+    // fallback to tagOptions
+    if (tagOptions[key]?.title) {
+      return tagOptions[key].title;
+    }
+    return "";
   };
 
   const getCurrentOptions = () => {
@@ -83,13 +87,7 @@ const GenerationSection = () => {
       <div className="w-full max-w-3xl">
         <AnimatePresence mode="wait">
           {!showPrompt ? (
-            <motion.div
-              key="tags"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="bg-white rounded-xl p-8 shadow-lg"
-            >
+            <div key="tags" className="bg-white rounded-xl p-8 shadow-lg">
               <div className="mb-8">
                 <div className="flex items-center justify-between mb-4">
                   <div>
@@ -97,7 +95,9 @@ const GenerationSection = () => {
                       {getCurrentQuestion()}
                     </h2>
                     <p className="text-sm text-gray-500 mt-1">
-                      Step {currentStep + 1} of 3
+                      {t.step
+                        .replace("{current}", currentStep + 1)
+                        .replace("{total}", 3)}
                     </p>
                   </div>
                   {currentStep > 0 && (
@@ -106,40 +106,36 @@ const GenerationSection = () => {
                       onClick={handleBack}
                       className="flex items-center"
                     >
-                      Back
+                      {t.back}
                     </Button>
                   )}
                 </div>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {selectedTags.map((tag, index) => (
-                    <motion.div
+                    <div
                       key={index}
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
                       className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm"
                     >
                       {getTagLabel(tag)}
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 {getCurrentOptions().options.map((option) => (
-                  <motion.button
+                  <button
                     key={option.id}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
                     onClick={() => handleTagSelect(option.id)}
                     className="p-4 bg-white border-2 border-indigo-200 rounded-lg text-left hover:border-indigo-500 transition-colors"
                   >
                     <span className="text-indigo-900 font-medium">
                       {option.label}
                     </span>
-                  </motion.button>
+                  </button>
                 ))}
               </div>
-            </motion.div>
+            </div>
           ) : (
             <motion.div
               key="prompt"
@@ -151,14 +147,14 @@ const GenerationSection = () => {
               <div className="mb-8">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-2xl font-semibold text-indigo-900">
-                    Add more details to your prompt
+                    {t.promptTitle}
                   </h2>
                   <Button
                     icon={<BsArrowLeft />}
                     onClick={handleBack}
                     className="flex items-center"
                   >
-                    Back
+                    {t.back}
                   </Button>
                 </div>
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -175,7 +171,7 @@ const GenerationSection = () => {
 
               <div className="flex items-center space-x-2 p-2">
                 <Input
-                  placeholder="Type a prompt..."
+                  placeholder={t.promptPlaceholder}
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   onPressEnter={handleGenerate}
@@ -183,7 +179,7 @@ const GenerationSection = () => {
                   size="large"
                   prefix={<BsStars className="text-indigo-600 mr-1" />}
                   suffix={
-                    <Tooltip title="Upload Reference Image">
+                    <Tooltip title={t.uploadTooltip}>
                       <MdAttachFile className="text-gray-400 cursor-pointer hover:text-indigo-600" />
                     </Tooltip>
                   }
@@ -194,7 +190,7 @@ const GenerationSection = () => {
                   className="bg-indigo-600 border-none hover:bg-indigo-700 text-white h-10"
                   size="large"
                 >
-                  Generate
+                  {t.generate}
                 </Button>
               </div>
             </motion.div>
