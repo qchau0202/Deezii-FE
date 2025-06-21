@@ -1,51 +1,102 @@
 import React from "react";
 import { useLanguage } from "../../contexts/LanguageContext";
 import languages from "../../config/languages";
-import {
-  FaFacebookF,
-  FaInstagram,
-  FaTwitter,
-  FaLinkedinIn,
-} from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+
+const teamMemberData = [
+  {
+    id: "tu",
+    image: "https://placehold.co/200x200",
+    roleColor: "bg-indigo-500",
+  },
+  {
+    id: "hien",
+    image: "/hien.jpg",
+    roleColor: "bg-indigo-500",
+  },
+  {
+    id: "chau",
+    image: "/chou.jpg",
+    roleColor: "bg-indigo-500",
+  },
+  {
+    id: "dung",
+    image: "https://avatar.iran.liara.run/public/53",
+    roleColor: "bg-indigo-500",
+  },
+  {
+    id: "hoa",
+    image: "/sanguyen.jpg",
+    roleColor: "bg-indigo-500",
+  },
+];
 
 const TeamSection = () => {
   const { lang } = useLanguage();
   const t = languages[lang].landing.team;
+
+  const teamMembers = t.members.map((memberInfo) => {
+    const staticData = teamMemberData.find((m) => m.id === memberInfo.id);
+    return { ...memberInfo, ...staticData };
+  });
+
   return (
     <section
       id="team-section"
-      className="min-h-screen flex items-center justify-center bg-indigo-900 py-16 border-t border-gray-200"
+      className="h-screen flex items-center justify-center bg-indigo-900 py-20"
     >
-      <div className="container mx-auto px-6">
-        <h2 className="text-4xl md:text-5xl font-extrabold mb-4 text-white text-center">
+      <div className="mx-auto px-6">
+        <h2 className="text-3xl md:text-4xl font-extrabold mb-4 text-white text-center">
           {t.title}
         </h2>
-        <p className="text-lg md:text-xl text-white mb-12 text-center max-w-3xl mx-auto">
+        <p className="text-base md:text-lg text-gray-300 mb-8 text-center max-w-3xl mx-auto">
           {t.description}
         </p>
-        <button className="bg-indigo-500 text-white rounded-full px-6 py-2 mb-12 block mx-auto hover:bg-indigo-600 transition-colors duration-300">
-          {t.seeAll}
-        </button>
-        <div className="flex flex-wrap justify-center gap-8">
-          {t.members.map((member, idx) => (
+        <div className="flex justify-center gap-6">
+          {teamMembers.map((member) => (
             <div
-              key={member.name}
-              className="p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 text-center w-full sm:w-64"
+              key={member.id}
+              className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-1 max-w-[18rem]"
             >
-              <img
-                src={`https://placehold.co/150x150`}
-                alt={member.name}
-                className="w-48 mx-auto mb-4 object-cover rounded-lg"
-              />
-              <h3 className="text-xl font-semibold text-black">
-                {member.name}
-              </h3>
-              <p className="text-gray-600">{member.role}</p>
-              <div className="flex justify-center gap-2 mt-2">
-                <FaFacebookF className="text-gray-400 hover:text-gray-600 cursor-pointer" />
-                <FaInstagram className="text-gray-400 hover:text-gray-600 cursor-pointer" />
-                <FaTwitter className="text-gray-400 hover:text-gray-600 cursor-pointer" />
-                <FaLinkedinIn className="text-gray-400 hover:text-gray-600 cursor-pointer" />
+              <div className="p-4 md:p-6 text-center flex flex-col items-center">
+                <div className="w-24 h-24 md:w-32 md:h-32 mb-4">
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-full h-full object-cover rounded-full shadow-md"
+                  />
+                </div>
+                <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-2">
+                  {member.name}
+                </h3>
+                <span
+                  className={`px-3 py-1 rounded-full text-white text-xs md:text-sm font-semibold ${member.roleColor} mb-3`}
+                >
+                  {member.role}
+                </span>
+                <p className="text-gray-600 text-xs md:text-sm h-16">
+                  {member.description}
+                </p>
+                <div className="flex justify-center gap-3">
+                  <a
+                    href="#"
+                    className="text-gray-400 hover:text-indigo-500 transition-colors"
+                  >
+                    <FaFacebookF size={18} />
+                  </a>
+                  <a
+                    href="#"
+                    className="text-gray-400 hover:text-indigo-500 transition-colors"
+                  >
+                    <FaInstagram size={18} />
+                  </a>
+                  <a
+                    href="#"
+                    className="text-gray-400 hover:text-indigo-500 transition-colors"
+                  >
+                    <FaLinkedinIn size={18} />
+                  </a>
+                </div>
               </div>
             </div>
           ))}

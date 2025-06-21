@@ -24,64 +24,64 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (credentials) => {
-      // Get users from localStorage
-      const users = JSON.parse(localStorage.getItem("users") || "[]");
+    // Get users from localStorage
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
 
-      // Find user with matching email and password
-      const foundUser = users.find(
-        (u) =>
-          u.email === credentials.email && u.password === credentials.password
-      );
+    // Find user with matching email and password
+    const foundUser = users.find(
+      (u) =>
+        u.email === credentials.email && u.password === credentials.password
+    );
 
-      if (!foundUser) {
-        throw new Error("Invalid email or password");
-      }
+    if (!foundUser) {
+      throw new Error("Invalid email or password");
+    }
 
-      // Store user in localStorage and state
-      const userData = {
-        id: foundUser.id,
-        email: foundUser.email,
-        display_name: foundUser.display_name,
-      };
+    // Store user in localStorage and state
+    const userData = {
+      id: foundUser.id,
+      email: foundUser.email,
+      display_name: foundUser.display_name,
+    };
 
-      localStorage.setItem("user", JSON.stringify(userData));
-      setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
 
-      return userData;
+    return userData;
   };
 
   const register = async (userData) => {
-      // Get existing users
-      const users = JSON.parse(localStorage.getItem("users") || "[]");
+    // Get existing users
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
 
-      // Check if email already exists
-      if (users.some((u) => u.email === userData.email)) {
-        throw new Error("Email already registered");
-      }
+    // Check if email already exists
+    if (users.some((u) => u.email === userData.email)) {
+      throw new Error("Email already registered");
+    }
 
-      // Create new user
-      const newUser = {
-        id: Date.now().toString(),
-        email: userData.email,
-        display_name: userData.display_name,
-        password: userData.password,
-      };
+    // Create new user
+    const newUser = {
+      id: Date.now().toString(),
+      email: userData.email,
+      display_name: userData.display_name,
+      password: userData.password,
+    };
 
-      // Save to localStorage
-      users.push(newUser);
-      localStorage.setItem("users", JSON.stringify(users));
+    // Save to localStorage
+    users.push(newUser);
+    localStorage.setItem("users", JSON.stringify(users));
 
-      // Log the user in
-      const userToStore = {
-        id: newUser.id,
-        email: newUser.email,
-        display_name: newUser.display_name,
-      };
+    // Log the user in
+    const userToStore = {
+      id: newUser.id,
+      email: newUser.email,
+      display_name: newUser.display_name,
+    };
 
-      localStorage.setItem("user", JSON.stringify(userToStore));
-      setUser(userToStore);
+    localStorage.setItem("user", JSON.stringify(userToStore));
+    setUser(userToStore);
 
-      return userToStore;
+    return userToStore;
   };
 
   const logout = () => {

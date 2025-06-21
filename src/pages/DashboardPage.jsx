@@ -1,10 +1,10 @@
 import NavigationSidebar from "../components/dashboard/NavigationSidebar";
-// import ToolsSidebar from "../components/dashboard/ToolsSidebar";
+import ToolsSidebar from "../components/dashboard/ToolsSidebar";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
-// import { useState } from "react";
+import { useState } from "react";
 
 const DashboardPage = () => {
-  //  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -16,6 +16,11 @@ const DashboardPage = () => {
     if (location.pathname.includes("/dashboard/chats")) return "chats";
     if (location.pathname.includes("/dashboard/explore")) return "explore";
     if (location.pathname.includes("/dashboard/edit/")) return "imageEditor";
+    if (location.pathname.includes("/dashboard/templates"))
+      return "templates";
+    if (location.pathname.includes("/dashboard/collections"))
+      return "collections";
+    if (location.pathname.includes("/dashboard/help")) return "help";
     return "generate";
   })();
 
@@ -34,32 +39,37 @@ const DashboardPage = () => {
       case "explore":
         navigate("/dashboard/explore");
         break;
+      case "templates":
+        navigate("/dashboard/templates");
+        break;
+      case "collections":
+        navigate("/dashboard/collections");
+        break;
+      case "help":
+        navigate("/dashboard/help");
+        break;
       default:
         navigate("/dashboard/generate");
     }
   };
 
   return (
-    <div className="grid grid-cols-10 w-full h-screen bg-gray-50 text-indigo-900">
-      <div className="col-span-1">
+    <div className="grid grid-cols-12 w-full h-screen bg-gray-50 text-indigo-900">
+      <div className="col-span-2">
         <NavigationSidebar
           selectedItem={selectedItem}
           onNavigate={handleNavigate}
         />
       </div>
-      <div className="col-span-9">
+      <div className="col-span-8">
         <Outlet />
       </div>
-      {/* <div
-        className={`transition-all duration-300 ${
-          sidebarCollapsed ? "col-span-2" : "col-span-2"
-        }`}
-      >
+      <div className="col-span-2">
         <ToolsSidebar
           collapsed={sidebarCollapsed}
           onCollapse={setSidebarCollapsed}
         />
-      </div> */}
+      </div>
     </div>
   );
 };

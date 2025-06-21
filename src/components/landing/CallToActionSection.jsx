@@ -7,7 +7,7 @@ const CallToActionSection = () => {
   const { lang } = useLanguage();
   const t = languages[lang].landing.cta;
   return (
-    <section className="min-h-screen flex items-center justify-center bg-indigo-900 text-white text-center py-16">
+    <section className="h-screen flex items-center justify-center bg-indigo-900 text-white text-center py-16">
       <div className="container mx-auto px-6">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-6">{t.title}</h2>
         <p className="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto">

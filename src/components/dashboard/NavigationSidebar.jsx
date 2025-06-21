@@ -49,63 +49,29 @@ const NavigationSidebar = ({ selectedItem, onNavigate }) => {
   return (
     <div className="h-screen bg-white p-4 flex flex-col justify-between shadow-lg border-r border-gray-200">
       <div>
-        <div className="flex items-center mb-8">
+        <div className="flex items-center mb-4">
           <BsStars className="text-indigo-600 mr-2" size={24} />
           <Link to="/" className="text-xl font-bold text-indigo-900">
             Deezii
           </Link>
         </div>
-
-        {/* Main Features */}
-        <div className="mb-8">
-          <h2 className="text-xs font-semibold mb-3 text-indigo-400 uppercase tracking-wider">
-            {navSection.main || "Main Features"}
-          </h2>
-          <div className="space-y-1">
-            <button
-              className={`w-full flex items-center p-2 text-indigo-700 md:text-sm text-xs ${
-                selectedItem === "generate"
-                  ? "bg-indigo-500 text-white"
-                  : "hover:bg-indigo-50"
-              } rounded-lg transition-colors`}
-              onClick={() => onNavigate("generate")}
-            >
-              <BsStars className="mr-2" /> {navMain.generate || "Generate"}
-            </button>
-            <button
-              className={`w-full flex items-center p-2 text-gray-600 md:text-sm text-xs ${
-                selectedItem === "myCreations"
-                  ? "bg-indigo-500 text-white"
-                  : "hover:bg-indigo-50"
-              } rounded-lg transition-colors`}
-              onClick={() => onNavigate("myCreations")}
-            >
-              <BsImage className="mr-2" size={18} />{" "}
-              {navMain.myCreations || "My Creations"}
-            </button>
-            <button
-              className={`w-full flex items-center p-2 text-gray-600 md:text-sm text-xs ${
-                selectedItem === "chats"
-                  ? "bg-indigo-500 text-white"
-                  : "hover:bg-indigo-50"
-              } rounded-lg transition-colors`}
-              onClick={() => onNavigate("chats")}
-            >
-              <BsChatLeftText className="mr-2" /> {navMain.chats || "Chats"}
-            </button>
-          </div>
-        </div>
-
         {/* Secondary Features */}
-        <div className="mb-8">
-          <h2 className="text-xs font-semibold mb-3 text-indigo-400 uppercase tracking-wider">
+        <button
+          className="w-full flex items-center p-3 text-md font-semibold rounded-lg transition-all duration-200 mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg cursor-pointer"
+          onClick={() => onNavigate("generate")}
+        >
+          <BsStars className="mr-2" size={18} />{" "}
+          {navMain.generate || "Generate"}
+        </button>
+        <div className="mb-4">
+          <h2 className="text-md font-bold mb-3 text-indigo-700">
             {navSection.discover || "Discover"}
           </h2>
           <div className="space-y-1">
             <button
-              className={`w-full flex items-center p-2 text-gray-600 md:text-sm text-xs ${
+              className={`w-full flex items-center p-2 text-gray-600 text-md font-semibold ${
                 selectedItem === "explore"
-                  ? "bg-indigo-500 text-white"
+                  ? "bg-indigo-100 text-indigo-700"
                   : "hover:bg-indigo-50"
               } rounded-lg transition-colors`}
               onClick={() => onNavigate("explore")}
@@ -113,9 +79,9 @@ const NavigationSidebar = ({ selectedItem, onNavigate }) => {
               <BsGrid3X3 className="mr-2" /> {navDiscover.explore || "Explore"}
             </button>
             <button
-              className={`w-full flex items-center p-2 text-gray-600 md:text-sm text-xs ${
+              className={`w-full flex items-center p-2 text-gray-600 text-md font-semibold ${
                 selectedItem === "templates"
-                  ? "bg-indigo-500 text-white"
+                  ? "bg-indigo-100 text-indigo-700"
                   : "hover:bg-indigo-50"
               } rounded-lg transition-colors`}
               onClick={() => onNavigate("templates")}
@@ -124,9 +90,9 @@ const NavigationSidebar = ({ selectedItem, onNavigate }) => {
               {navDiscover.templates || "Templates"}
             </button>
             <button
-              className={`w-full flex items-center p-2 text-gray-600 md:text-sm text-xs ${
+              className={`w-full flex items-center p-2 text-gray-600 text-md font-semibold ${
                 selectedItem === "collections"
-                  ? "bg-indigo-500 text-white"
+                  ? "bg-indigo-100 text-indigo-700"
                   : "hover:bg-indigo-50"
               } rounded-lg transition-colors`}
               onClick={() => onNavigate("collections")}
@@ -136,17 +102,46 @@ const NavigationSidebar = ({ selectedItem, onNavigate }) => {
             </button>
           </div>
         </div>
+        {/* Main Features */}
+        <div className="mb-4">
+          <h2 className="text-md font-bold mb-3 text-indigo-700">
+            {navSection.main || "Main Features"}
+          </h2>
+          <div className="space-y-1">
+            <button
+              className={`w-full flex items-center p-2 text-gray-600 text-md font-semibold ${
+                selectedItem === "myCreations"
+                  ? "bg-indigo-100 text-indigo-700"
+                  : "hover:bg-indigo-50"
+              } rounded-lg transition-colors`}
+              onClick={() => onNavigate("myCreations")}
+            >
+              <BsImage className="mr-2" size={18} />{" "}
+              {navMain.myCreations || "My Creations"}
+            </button>
+            <button
+              className={`w-full flex items-center p-2 text-gray-600 text-md font-semibold ${
+                selectedItem === "chats"
+                  ? "bg-indigo-100 text-indigo-700"
+                  : "hover:bg-indigo-50"
+              } rounded-lg transition-colors`}
+              onClick={() => onNavigate("chats")}
+            >
+              <BsChatLeftText className="mr-2" /> {navMain.chats || "Chats"}
+            </button>
+          </div>
+        </div>
 
         {/* Help & Support */}
         <div className="mb-8">
-          <h2 className="text-xs font-semibold mb-3 text-indigo-400 uppercase tracking-wider">
+          <h2 className="text-md font-bold mb-3 text-indigo-700">
             {navSection.support || "Support"}
           </h2>
           <div className="space-y-1">
             <button
-              className={`w-full flex items-center p-2 text-gray-600 md:text-sm text-xs ${
+              className={`w-full flex items-center p-2 text-gray-600 text-md font-semibold ${
                 selectedItem === "help"
-                  ? "bg-indigo-500 text-white"
+                  ? "bg-indigo-100 text-indigo-700"
                   : "hover:bg-indigo-50"
               } rounded-lg transition-colors`}
               onClick={() => onNavigate("help")}

@@ -1,123 +1,167 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { Input, Button, Select, Tooltip } from "antd";
 import {
-  Input,
-  Button,
-  Dropdown,
-  Menu,
-  Tooltip,
-  Switch,
-  Slider,
-  Select,
-  message,
-} from "antd";
-import {
+  SearchOutlined,
   AppstoreOutlined,
   BarsOutlined,
   PlusOutlined,
   UploadOutlined,
-  BulbOutlined,
-  QuestionCircleOutlined,
-  BgColorsOutlined,
-  SettingOutlined,
   FilterOutlined,
   SortAscendingOutlined,
-  SmileOutlined,
+  ExpandOutlined,
+  FormatPainterOutlined,
+  MinusOutlined,
 } from "@ant-design/icons";
+import { FaRegLightbulb } from "react-icons/fa";
+import toast from "react-hot-toast";
+import { useLanguage } from "../../contexts/LanguageContext";import languages from "../../config/languages";
 
 const { Option } = Select;
 
-const sortOptions = [
-  { label: "Newest", value: "newest" },
-  { label: "Oldest", value: "oldest" },
-  { label: "Most Liked", value: "liked" },
-  { label: "A-Z", value: "az" },
-];
-
-const filterOptions = [
-  { label: "All", value: "all" },
-  { label: "Favorites", value: "favorites" },
-  { label: "Posters", value: "poster" },
-  { label: "Logos", value: "logo" },
-  { label: "Stories", value: "story" },
-  // Add more as needed
-];
-
-const tips = [
-  "Tip: Use the search bar to quickly find your creations!",
-  "Tip: Switch between Masonry and Grid view for your preferred layout.",
-  "Tip: Use filters to narrow down your gallery.",
-  "Tip: Adjust card size for a better browsing experience.",
-  "Need help? Click the ? icon!",
-];
-
 const ToolsSidebar = () => {
+  const { lang } = useLanguage();
+  const t =
+    lang === "vi"
+      ? languages.vi.dashboard.toolsSidebar
+      : languages.en.dashboard.toolsSidebar;
+
   const [viewMode, setViewMode] = useState("masonry");
-  const [theme, setTheme] = useState("light");
-  const [cardSize, setCardSize] = useState(100);
   const [tipIndex, setTipIndex] = useState(0);
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("newest");
-  const [filter, setFilter] = useState("all");
-
-  const handleThemeToggle = (checked) => {
-    setTheme(checked ? "dark" : "light");
-    message.success(`Switched to ${checked ? "Dark" : "Light"} Mode`);
-  };
-
-  const handleCardSize = (value) => {
-    setCardSize(value);
-  };
+  const [showTip, setShowTip] = useState(false);
+  const [imageCount, setImageCount] = useState(1);
 
   const handleNextTip = () => {
-    setTipIndex((prev) => (prev + 1) % tips.length);
+    setShowTip(true);
+    setTipIndex((prev) => (prev + 1) % t.tips.length);
+  };
+
+  const handleImageCountChange = (increment) => {
+    const newCount = imageCount + increment;
+
+    if (newCount > 4) {
+      toast.error(t.freeTrialLimit);
+      return;
+    }
+
+    if (newCount < 1) {
+      return;
+    }
+
+    setImageCount(newCount);
   };
 
   return (
-    <aside className="h-screen bg-white px-6 py-4 flex flex-col justify-between shadow-lg border-l border-gray-200 min-w-[270px]">
-      <div className="flex-1 overflow-y-auto">
-        {/* Gallery Controls */}
+    <aside className="h-screen bg-white px-6 py-8 flex flex-col shadow-lg border-l border-gray-200">
+      <div className="flex-1 overflow-y-auto pr-2">
         <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-4 text-indigo-900 flex items-center gap-2">
-            <SettingOutlined /> Gallery Controls
+          <h2 className="text-lg font-semibold mb-4 text-indigo-800">
+            {t.generationSettings}
+          </h2>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-2">
+                {t.numberOfImages}
+              </label>
+              <div className="flex items-center gap-2">
+                <Button
+                  icon={<MinusOutlined />}
+                  onClick={() => handleImageCountChange(-1)}
+                  disabled={imageCount <= 1}
+                  size="large"
+                  className="flex-shrink-0"
+                />
+                <div className="flex-1 text-center">
+                  <span className="text-lg font-semibold text-indigo-800">
+                    {imageCount}
+                  </span>
+                  <span className="text-sm text-gray-500 ml-1">
+                    {imageCount === 1 ? t.image : t.images}
+                  </span>
+                </div>
+                <Button
+                  icon={<PlusOutlined />}
+                  onClick={() => handleImageCountChange(1)}
+                  size="large"
+                  className="flex-shrink-0"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-2">
+                {t.imageRatio}
+              </label>
+              <Select
+                defaultValue="1:1"
+                style={{ width: "100%" }}
+                size="large"
+                suffixIcon={<ExpandOutlined />}
+              >
+                {t.imageRatioOptions.map((opt) => (
+                  <Option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </Option>
+                ))}
+              </Select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-2">
+                {t.artStyle}
+              </label>
+              <Select
+                defaultValue="photo"
+                style={{ width: "100%" }}
+                size="large"
+                suffixIcon={<FormatPainterOutlined />}
+              >
+                {t.styleOptions.map((opt) => (
+                  <Option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </Option>
+                ))}
+              </Select>
+            </div>
+          </div>
+        </div>
+        <div className="mb-8">
+          <h2 className="text-lg font-semibold mb-4 text-indigo-800">
+            {t.galleryControls}
           </h2>
           <Input
-            placeholder="Search creations..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            prefix={<SmileOutlined className="text-indigo-600" />}
-            className="mb-3"
-            allowClear
+            placeholder={t.searchPlaceholder}
+            prefix={<SearchOutlined className="text-gray-400" />}
+            className="mb-4"
             size="large"
+            allowClear
           />
-          <div className="flex gap-2 mb-3">
+          <div className="flex flex-wrap items-center gap-3">
             <Select
-              value={sort}
-              onChange={setSort}
-              style={{ minWidth: 120 }}
+              defaultValue="newest"
+              style={{ flex: "1 1 120px" }}
               size="large"
               suffixIcon={<SortAscendingOutlined />}
             >
-              {sortOptions.map((opt) => (
+              {t.sortOptions.map((opt) => (
                 <Option key={opt.value} value={opt.value}>
                   {opt.label}
                 </Option>
               ))}
             </Select>
             <Select
-              value={filter}
-              onChange={setFilter}
-              style={{ minWidth: 120 }}
+              defaultValue="all"
+              style={{ flex: "1 1 120px" }}
               size="large"
               suffixIcon={<FilterOutlined />}
             >
-              {filterOptions.map((opt) => (
+              {t.filterOptions.map((opt) => (
                 <Option key={opt.value} value={opt.value}>
                   {opt.label}
                 </Option>
               ))}
             </Select>
             <Tooltip
-              title={viewMode === "masonry" ? "Masonry View" : "Grid View"}
+              title={
+                viewMode === "masonry" ? t.switchToGrid : t.switchToMasonry
+              }
             >
               <Button
                 icon={
@@ -131,92 +175,50 @@ const ToolsSidebar = () => {
                   setViewMode(viewMode === "masonry" ? "grid" : "masonry")
                 }
                 size="large"
-                className="bg-white border-none shadow"
+                className="flex-shrink-0"
               />
             </Tooltip>
           </div>
         </div>
 
-        {/* Quick Actions */}
         <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-4 text-indigo-900 flex items-center gap-2">
-            <PlusOutlined /> Quick Actions
+          <h2 className="text-lg font-semibold mb-4 text-indigo-800">
+            {t.quickActions}
           </h2>
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-3">
             <Button
               icon={<UploadOutlined />}
               size="large"
-              className="bg-indigo-600 text-white border-none"
+              className="w-full bg-indigo-600 text-white border-none hover:bg-indigo-700"
             >
-              Upload Image
+              {t.uploadImage}
             </Button>
             <Button
               icon={<PlusOutlined />}
               size="large"
-              className="bg-white text-indigo-900 border-none shadow"
+              className="w-full bg-gray-100 text-indigo-900 border"
             >
-              New Project
+              {t.newProject}
             </Button>
           </div>
         </div>
+      </div>
 
-        {/* Personalization */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-4 text-indigo-900 flex items-center gap-2">
-            <BgColorsOutlined /> Personalization
-          </h2>
-          <div className="flex items-center gap-3 mb-4">
-            <span className="text-sm text-gray-700">Theme</span>
-            <Switch
-              checkedChildren={<BulbOutlined />}
-              unCheckedChildren={<BulbOutlined />}
-              checked={theme === "dark"}
-              onChange={handleThemeToggle}
-            />
-            <span className="text-xs text-gray-400">
-              {theme === "dark" ? "Dark" : "Light"}
-            </span>
+      <div className="mt-auto">
+        {showTip && (
+          <div className="bg-yellow-100 border-l-4 border-yellow-400 text-yellow-800 p-3 rounded-r-lg mb-4 text-sm">
+            <p>{t.tips[tipIndex]}</p>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-gray-700">Card Size</span>
-            <Slider
-              min={80}
-              max={200}
-              value={cardSize}
-              onChange={handleCardSize}
-              style={{ width: 120 }}
-            />
-          </div>
-        </div>
-
-        {/* Quick Tips / Help */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-4 text-indigo-900 flex items-center gap-2">
-            <QuestionCircleOutlined /> Quick Tips
-          </h2>
-          <div className="flex items-center gap-2 bg-indigo-50 rounded-lg p-3">
-            <span className="text-indigo-700 text-sm">{tips[tipIndex]}</span>
+        )}
+        <div className="flex justify-end">
+          <Tooltip title={t.getTip}>
             <Button
-              icon={<SmileOutlined />}
-              size="small"
-              className="ml-auto bg-white border-none shadow"
+              icon={<FaRegLightbulb />}
               onClick={handleNextTip}
+              shape="circle"
+              size="large"
             />
-          </div>
-        </div>
-
-        {/* Contact Support */}
-        <div className="mb-8">
-          <Button
-            type="link"
-            icon={<QuestionCircleOutlined />}
-            className="text-indigo-700"
-            onClick={() =>
-              message.info("Contact support at support@deezii.com")
-            }
-          >
-            Contact Support
-          </Button>
+          </Tooltip>
         </div>
       </div>
     </aside>

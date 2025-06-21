@@ -9,6 +9,9 @@ import MyCreationsSection from "../components/dashboard/MyCreationsSection";
 import ChatSection from "../components/dashboard/ChatSection";
 import ExploreSection from "../components/dashboard/ExploreSection";
 import ImageEditorSection from "../components/dashboard/ImageEditorSection";
+import TemplateSection from "../components/dashboard/TemplateSection";
+import CollectionsSection from "../components/dashboard/CollectionsSection";
+import HelpSection from "../components/dashboard/HelpSection";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +31,9 @@ const router = createBrowserRouter([
           { path: "chats", element: <ChatSection /> },
           { path: "explore", element: <ExploreSection /> },
           { path: "edit/:id", element: <ImageEditorSection /> },
+          { path: "templates", element: <TemplateSection /> },
+          { path: "collections", element: <CollectionsSection /> },
+          { path: "help", element: <HelpSection /> },
         ],
       },
       {

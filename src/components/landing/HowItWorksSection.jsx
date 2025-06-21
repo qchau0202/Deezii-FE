@@ -12,39 +12,41 @@ const HowItWorksSection = () => {
   return (
     <section
       id="tutorial-section"
-      className="min-h-screen flex items-center justify-center bg-indigo-900 py-16"
+      className="h-screen flex flex-col justify-center items-center bg-indigo-900"
     >
-      <div className="container mx-auto px-6 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-white drop-shadow-md">
+      <div className="mx-auto px-6 text-center mt-8">
+        <h1 className="text-3xl md:text-4xl font-extrabold mb-4 text-white">
           {title}
         </h1>
-        <p className="text-lg md:text-xl text-gray-200 mb-12 max-w-3xl mx-auto">
+        <p className="text-lg text-gray-200 mb-8">
           {t.description}
         </p>
-        <div className="flex flex-col lg:flex-row justify-between items-start">
-          <div className="w-full lg:w-1/2 mb-8 lg:mb-0">
+        <div className="flex justify-center gap-6">
+          <div className="w-1/2 flex justify-center items-center">
             <img
-              src="https://placehold.co/600x600"
+              src="https://placehold.co/800x400"
               alt="AI Image Generation"
               className="rounded-2xl shadow-lg"
             />
           </div>
-          <div className="w-full lg:w-1/2">
+          <div className="flex flex-col justify-center">
             <div className="space-y-5">
               {t.steps.map((step, idx) => (
                 <div
                   key={idx}
-                  className="p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+                  className="p-4 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
                 >
                   <div className="flex items-center mb-2">
-                    <div className="w-14 h-14 flex items-center justify-center bg-indigo-100 text-indigo-800 rounded-full mr-4 text-xl font-semibold">
+                    <div className="w-10 h-10 flex items-center justify-center bg-indigo-100 text-indigo-800 rounded-full mr-4 text-base font-semibold">
                       {String(idx + 1).padStart(2, "0")}
                     </div>
-                    <h1 className="text-2xl font-semibold text-indigo-800">
+                    <h1 className="text-md font-semibold text-indigo-800">
                       {step.title}
                     </h1>
                   </div>
-                  <p className="text-gray-600 text-start">{step.desc}</p>
+                  <p className="text-gray-600 text-start text-sm">
+                    {step.desc}
+                  </p>
                 </div>
               ))}
             </div>
