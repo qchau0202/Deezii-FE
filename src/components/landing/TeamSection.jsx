@@ -6,7 +6,7 @@ import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 const teamMemberData = [
   {
     id: "tu",
-    image: "https://placehold.co/200x200",
+    image: "/tu.jpg",
     roleColor: "bg-indigo-500",
   },
   {
@@ -21,7 +21,7 @@ const teamMemberData = [
   },
   {
     id: "dung",
-    image: "https://avatar.iran.liara.run/public/53",
+    image: "/dung_mock.png",
     roleColor: "bg-indigo-500",
   },
   {
