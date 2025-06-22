@@ -34,8 +34,15 @@ const actionBtn =
 const exportBtn =
   "flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-indigo-700 border border-indigo-100 hover:bg-indigo-50 hover:text-indigo-900 transition-colors duration-200";
 
-const ImageEditorSection = ({ imageId }) => {
+const ImageEditorSection = () => {
   const [selectedTool, setSelectedTool] = useState(null);
+  const [scale, setScale] = useState(1);
+  const [rotation, setRotation] = useState(0);
+
+  const handleZoomIn = () => setScale((prev) => prev * 1.1);
+  const handleZoomOut = () => setScale((prev) => prev / 1.1);
+  const handleRotateLeft = () => setRotation((prev) => prev - 90);
+  const handleRotateRight = () => setRotation((prev) => prev + 90);
 
   const tools = [
     { icon: <ScissorOutlined />, name: "Crop", tooltip: "Crop Image" },
@@ -47,29 +54,41 @@ const ImageEditorSection = ({ imageId }) => {
   ];
 
   return (
-    <div className="h-screen bg-gray-50 flex flex-col">
+    <div className="h-screen flex flex-col">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 p-4 flex items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-4">
-          <button className={iconBtnBase}>
-            <UndoOutlined />
-          </button>
-          <button className={iconBtnBase}>
-            <RedoOutlined />
-          </button>
+          <Tooltip title="Undo">
+            <button className={iconBtnBase}>
+              <UndoOutlined />
+            </button>
+          </Tooltip>
+          <Tooltip title="Redo">
+            <button className={iconBtnBase}>
+              <RedoOutlined />
+            </button>
+          </Tooltip>
           <div className="h-6 w-px bg-gray-200 mx-2" />
-          <button className={iconBtnBase}>
-            <ZoomInOutlined />
-          </button>
-          <button className={iconBtnBase}>
-            <ZoomOutOutlined />
-          </button>
-          <button className={iconBtnBase}>
-            <RotateLeftOutlined />
-          </button>
-          <button className={iconBtnBase}>
-            <RotateRightOutlined />
-          </button>
+          <Tooltip title="Zoom In">
+            <button className={iconBtnBase} onClick={handleZoomIn}>
+              <ZoomInOutlined />
+            </button>
+          </Tooltip>
+          <Tooltip title="Zoom Out">
+            <button className={iconBtnBase} onClick={handleZoomOut}>
+              <ZoomOutOutlined />
+            </button>
+          </Tooltip>
+          <Tooltip title="Rotate Left">
+            <button className={iconBtnBase} onClick={handleRotateLeft}>
+              <RotateLeftOutlined />
+            </button>
+          </Tooltip>
+          <Tooltip title="Rotate Right">
+            <button className={iconBtnBase} onClick={handleRotateRight}>
+              <RotateRightOutlined />
+            </button>
+          </Tooltip>
         </div>
         <div className="flex items-center gap-2 sm:gap-4">
           <button className={actionBtn}>
@@ -82,9 +101,9 @@ const ImageEditorSection = ({ imageId }) => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex">
+      <div className="flex-1 grid grid-cols-10 min-h-0">
         {/* Tools Sidebar */}
-        <div className="w-16 bg-white border-r border-gray-200 p-2 flex flex-col items-center gap-2">
+        <div className="col-span-1 bg-white border-r border-gray-200 p-2 flex flex-col items-center gap-2">
           {tools.map((tool) => (
             <Tooltip key={tool.name} title={tool.tooltip} placement="right">
               <button
@@ -102,7 +121,7 @@ const ImageEditorSection = ({ imageId }) => {
           ))}
         </div>
         {/* Properties Panel */}
-        <div className="w-64 bg-white border-l border-gray-200 p-4">
+        <div className="col-span-2 bg-white border-l border-gray-200 p-4">
           <h3 className="text-lg font-semibold text-indigo-900 mb-4">
             Properties
           </h3>
@@ -122,10 +141,20 @@ const ImageEditorSection = ({ imageId }) => {
           )}
         </div>
         {/* Canvas Area */}
-        <div className="flex-1 p-4 flex items-center justify-center bg-gray-100">
-          <div className="bg-white shadow-lg rounded-lg p-4 w-full h-full max-w-4xl max-h-[calc(100vh-12rem)] flex items-center justify-center">
-            <div className="text-gray-400">
-              Canvas Area - Image ID: {imageId}
+        <div className="col-span-7 bg-gray-100 overflow-auto hide-scrollbar">
+          <div className="w-full h-full flex items-center justify-center p-4">
+            <div
+              style={{
+                transform: `scale(${scale}) rotate(${rotation}deg)`,
+                transition: "transform 0.2s ease-in-out",
+              }}
+              className="flex items-center justify-center"
+            >
+              <img
+                src="/ChatImageMockTest.png"
+                alt="Editor"
+                className="object-contain max-w-[50%] max-h-[50%]"
+              />
             </div>
           </div>
         </div>

@@ -45,10 +45,7 @@ const ChatSection = () => {
               ? {
                   ...msg,
                   loading: false,
-                  images: [
-                    "https://placehold.co/200x200",
-                    "https://placehold.co/200x200",
-                  ],
+                  images: ["/ChatImageMockTest.png"],
                 }
               : msg
           )

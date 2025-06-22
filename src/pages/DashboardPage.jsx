@@ -5,8 +5,13 @@ import { useState } from "react";
 
 const DashboardPage = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [navCollapsed, setNavCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const toggleNavCollapse = () => {
+    setNavCollapsed(!navCollapsed);
+  };
 
   // Determine selected item from the URL
   const selectedItem = (() => {
@@ -16,8 +21,7 @@ const DashboardPage = () => {
     if (location.pathname.includes("/dashboard/chats")) return "chats";
     if (location.pathname.includes("/dashboard/explore")) return "explore";
     if (location.pathname.includes("/dashboard/edit/")) return "imageEditor";
-    if (location.pathname.includes("/dashboard/templates"))
-      return "templates";
+    if (location.pathname.includes("/dashboard/templates")) return "templates";
     if (location.pathname.includes("/dashboard/collections"))
       return "collections";
     if (location.pathname.includes("/dashboard/help")) return "help";
@@ -54,22 +58,22 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="grid grid-cols-12 w-full h-screen bg-gray-50 text-indigo-900">
-      <div className="col-span-2">
-        <NavigationSidebar
-          selectedItem={selectedItem}
-          onNavigate={handleNavigate}
-        />
-      </div>
-      <div className="col-span-8">
+    <div className="flex w-full h-screen bg-gray-50 text-indigo-900">
+      <NavigationSidebar
+        selectedItem={selectedItem}
+        onNavigate={handleNavigate}
+        collapsed={navCollapsed}
+        onToggleCollapse={toggleNavCollapse}
+      />
+      <main className="flex-1 min-w-0">
         <Outlet />
-      </div>
-      <div className="col-span-2">
+      </main>
+      <aside className="w-1/6">
         <ToolsSidebar
           collapsed={sidebarCollapsed}
           onCollapse={setSidebarCollapsed}
         />
-      </div>
+      </aside>
     </div>
   );
 };

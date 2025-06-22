@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { Button, Tooltip, Avatar, Modal } from "antd";
 import { motion } from "framer-motion";
-import {
-  DownloadOutlined,
-  DeleteOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
 import { myCreationData } from "../../data/myCreationData";
 import Masonry from "react-masonry-css";
 import {

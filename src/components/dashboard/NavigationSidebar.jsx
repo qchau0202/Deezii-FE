@@ -1,10 +1,11 @@
 // import { useState } from "react";
-import { Dropdown, Menu } from "antd";
+import { Dropdown, Tooltip } from "antd";
 import {
   DownOutlined,
   BellOutlined,
   SettingOutlined,
   LogoutOutlined,
+  PlusOutlined,
 } from "@ant-design/icons";
 import {
   BsStars,
@@ -19,8 +20,14 @@ import {
 import { Link } from "react-router-dom";
 import { useLanguage } from "../../contexts/LanguageContext";
 import languages from "../../config/languages";
+import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 
-const NavigationSidebar = ({ selectedItem, onNavigate }) => {
+const NavigationSidebar = ({
+  selectedItem,
+  onNavigate,
+  collapsed,
+  onToggleCollapse,
+}) => {
   const { lang } = useLanguage();
   const t = languages[lang]?.dashboard;
   const nav = t.navigation || {};
@@ -46,127 +53,136 @@ const NavigationSidebar = ({ selectedItem, onNavigate }) => {
   //   </Menu>
   // );
 
+  const NavButton = ({ itemName, icon, tooltipText, isGradient = false }) => (
+    <Tooltip title={collapsed ? tooltipText : ""} placement="right">
+      <button
+        className={`w-full flex items-center p-3 text-md font-semibold rounded-lg transition-all duration-200 my-2 cursor-pointer ${
+          collapsed ? "justify-center" : ""
+        } ${
+          isGradient
+            ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg"
+            : selectedItem === itemName
+            ? "bg-indigo-100 text-indigo-700"
+            : "text-gray-600 hover:bg-indigo-50"
+        }`}
+        onClick={() => onNavigate(itemName)}
+      >
+        <span className={!collapsed ? "mr-2" : ""}>{icon}</span>
+        {!collapsed && <span>{tooltipText}</span>}
+      </button>
+    </Tooltip>
+  );
+
   return (
-    <div className="h-screen bg-white p-4 flex flex-col justify-between shadow-lg border-r border-gray-200">
+    <div
+      className={`h-screen bg-white p-2 flex flex-col justify-between shadow-lg border-r border-gray-200 transition-all duration-300 ease-in-out ${
+        collapsed ? "w-[72px]" : "w-64"
+      }`}
+    >
       <div>
-        <div className="flex items-center mb-4">
-          <BsStars className="text-indigo-600 mr-2" size={24} />
-          <Link to="/" className="text-xl font-bold text-indigo-900">
-            Deezii
-          </Link>
-        </div>
-        {/* Secondary Features */}
-        <button
-          className="w-full flex items-center p-3 text-md font-semibold rounded-lg transition-all duration-200 mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg cursor-pointer"
-          onClick={() => onNavigate("generate")}
+        <div
+          className={`flex items-center mb-4 p-2 ${
+            collapsed ? "justify-center" : "justify-between"
+          }`}
         >
-          <BsStars className="mr-2" size={18} />{" "}
-          {navMain.generate || "Generate"}
-        </button>
-        <div className="mb-4">
-          <h2 className="text-md font-bold mb-3 text-indigo-700">
+          {!collapsed && (
+            <Link
+              to="/"
+              className="text-xl font-bold text-indigo-900 flex items-center"
+            >
+              <BsStars className="text-indigo-600 mr-2" size={24} />
+              Deezii
+            </Link>
+          )}
+          <button
+            onClick={onToggleCollapse}
+            className="text-indigo-600 hover:bg-indigo-100 p-1 rounded-full"
+          >
+            {collapsed ? (
+              <AiOutlineMenuUnfold size={24} />
+            ) : (
+              <AiOutlineMenuFold size={24} />
+            )}
+          </button>
+        </div>
+
+        <NavButton
+          itemName="generate"
+          icon={
+            collapsed ? (
+              <PlusOutlined style={{ fontSize: "18px" }} />
+            ) : (
+              <BsStars size={18} />
+            )
+          }
+          tooltipText={navMain.generate || "Generate"}
+          isGradient
+        />
+
+        {!collapsed && (
+          <h2 className="text-md font-bold my-3 text-indigo-700 px-2">
             {navSection.discover || "Discover"}
           </h2>
-          <div className="space-y-1">
-            <button
-              className={`w-full flex items-center p-2 text-gray-600 text-md font-semibold ${
-                selectedItem === "explore"
-                  ? "bg-indigo-100 text-indigo-700"
-                  : "hover:bg-indigo-50"
-              } rounded-lg transition-colors`}
-              onClick={() => onNavigate("explore")}
-            >
-              <BsGrid3X3 className="mr-2" /> {navDiscover.explore || "Explore"}
-            </button>
-            <button
-              className={`w-full flex items-center p-2 text-gray-600 text-md font-semibold ${
-                selectedItem === "templates"
-                  ? "bg-indigo-100 text-indigo-700"
-                  : "hover:bg-indigo-50"
-              } rounded-lg transition-colors`}
-              onClick={() => onNavigate("templates")}
-            >
-              <BsBookmark className="mr-2" />{" "}
-              {navDiscover.templates || "Templates"}
-            </button>
-            <button
-              className={`w-full flex items-center p-2 text-gray-600 text-md font-semibold ${
-                selectedItem === "collections"
-                  ? "bg-indigo-100 text-indigo-700"
-                  : "hover:bg-indigo-50"
-              } rounded-lg transition-colors`}
-              onClick={() => onNavigate("collections")}
-            >
-              <BsCollection className="mr-2" />{" "}
-              {navDiscover.collections || "Collections"}
-            </button>
-          </div>
-        </div>
-        {/* Main Features */}
-        <div className="mb-4">
-          <h2 className="text-md font-bold mb-3 text-indigo-700">
+        )}
+        <NavButton
+          itemName="explore"
+          icon={<BsGrid3X3 />}
+          tooltipText={navDiscover.explore || "Explore"}
+        />
+        <NavButton
+          itemName="templates"
+          icon={<BsBookmark />}
+          tooltipText={navDiscover.templates || "Templates"}
+        />
+        <NavButton
+          itemName="collections"
+          icon={<BsCollection />}
+          tooltipText={navDiscover.collections || "Collections"}
+        />
+
+        {!collapsed && (
+          <h2 className="text-md font-bold my-3 text-indigo-700 px-2">
             {navSection.main || "Main Features"}
           </h2>
-          <div className="space-y-1">
-            <button
-              className={`w-full flex items-center p-2 text-gray-600 text-md font-semibold ${
-                selectedItem === "myCreations"
-                  ? "bg-indigo-100 text-indigo-700"
-                  : "hover:bg-indigo-50"
-              } rounded-lg transition-colors`}
-              onClick={() => onNavigate("myCreations")}
-            >
-              <BsImage className="mr-2" size={18} />{" "}
-              {navMain.myCreations || "My Creations"}
-            </button>
-            <button
-              className={`w-full flex items-center p-2 text-gray-600 text-md font-semibold ${
-                selectedItem === "chats"
-                  ? "bg-indigo-100 text-indigo-700"
-                  : "hover:bg-indigo-50"
-              } rounded-lg transition-colors`}
-              onClick={() => onNavigate("chats")}
-            >
-              <BsChatLeftText className="mr-2" /> {navMain.chats || "Chats"}
-            </button>
-          </div>
-        </div>
+        )}
+        <NavButton
+          itemName="myCreations"
+          icon={<BsImage size={18} />}
+          tooltipText={navMain.myCreations || "My Creations"}
+        />
+        <NavButton
+          itemName="chats"
+          icon={<BsChatLeftText />}
+          tooltipText={navMain.chats || "Chats"}
+        />
 
-        {/* Help & Support */}
-        <div className="mb-8">
-          <h2 className="text-md font-bold mb-3 text-indigo-700">
+        {!collapsed && (
+          <h2 className="text-md font-bold my-3 text-indigo-700 px-2">
             {navSection.support || "Support"}
           </h2>
-          <div className="space-y-1">
-            <button
-              className={`w-full flex items-center p-2 text-gray-600 text-md font-semibold ${
-                selectedItem === "help"
-                  ? "bg-indigo-100 text-indigo-700"
-                  : "hover:bg-indigo-50"
-              } rounded-lg transition-colors`}
-              onClick={() => onNavigate("help")}
-            >
-              <BsQuestionCircle className="mr-2" />{" "}
-              {navSupport.help || "Help Center"}
-            </button>
-          </div>
-        </div>
+        )}
+        <NavButton
+          itemName="help"
+          icon={<BsQuestionCircle />}
+          tooltipText={navSupport.help || "Help Center"}
+        />
       </div>
 
-      {/* Profile Section */}
-      <Dropdown
-      // menu={profileMenu}
-      // open={isProfileMenuVisible}
-      // onOpenChange={(visible) => setIsProfileMenuVisible(visible)}
-      // placement="topRight"
-      // trigger={["click"]}
-      >
-        <div className="flex items-center p-2 bg-indigo-50 rounded-lg text-indigo-900 hover:bg-indigo-100 transition-colors cursor-pointer">
-          <div className="w-8 h-8 bg-indigo-200 rounded-full flex items-center justify-center mr-2">
+      <Dropdown placement="topRight" trigger={["click"]}>
+        <div
+          className={`flex items-center p-2 bg-indigo-50 rounded-lg text-indigo-900 hover:bg-indigo-100 transition-colors cursor-pointer ${
+            collapsed ? "justify-center" : ""
+          }`}
+        >
+          <div
+            className={`w-8 h-8 bg-indigo-200 rounded-full flex items-center justify-center ${
+              !collapsed ? "mr-2" : ""
+            }`}
+          >
             <BsPerson className="text-indigo-700" />
           </div>
-          <span className="font-medium flex-1">Chou</span>
-          <DownOutlined className="text-indigo-600" />
+          {!collapsed && <span className="font-medium flex-1">Chou</span>}
+          {!collapsed && <DownOutlined className="text-indigo-600" />}
         </div>
       </Dropdown>
     </div>
