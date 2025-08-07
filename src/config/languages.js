@@ -120,8 +120,8 @@ const en = {
           role: "Fullstack Developer",
         },
         {
-          id: "dung",
-          name: "Nguyen Hoang Dung",
+          id: "khoa",
+          name: "Huynh Le Dang Khoa",
           description: "Developing AI & Data Model",
           role: "AI Developer",
         },
@@ -430,8 +430,8 @@ const vi = {
           role: "Fullstack Developer",
         },
         {
-          id: "dung",
-          name: "Nguyễn Hoàng Dung",
+          id: "khoa",
+          name: "Huỳnh Lê Đăng Khoa",
           description: "Phụ trách phát triển AI & xử lý dữ liệu mô hình",
           role: "AI Developer",
         },

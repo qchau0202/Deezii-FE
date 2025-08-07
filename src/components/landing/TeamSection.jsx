@@ -20,8 +20,8 @@ const teamMemberData = [
     roleColor: "bg-indigo-500",
   },
   {
-    id: "dung",
-    image: "/dung_mock.png",
+    id: "khoa",
+    image: "/khoa.jpg",
     roleColor: "bg-indigo-500",
   },
   {
