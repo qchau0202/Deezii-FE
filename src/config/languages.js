@@ -353,7 +353,7 @@ const vi = {
       title1: "Khai phá sáng tạo",
       title2: "với công nghệ AI",
       description:
-        "Deezii giúp các doanh nghiệp nhỏ tạo ra hình ảnh chuyên nghiệp, ấn tượng chỉ trong vài giây với AI—không cần kỹ năng thiết kế.",
+        "Deezii giúp các doanh nghiệp nhỏ tạo ra hình ảnh truyền thông đẹp trong vài giây mà không cần biết thiết kế.",
       cta: "Tạo ảnh của bạn",
     },
     explore: {
