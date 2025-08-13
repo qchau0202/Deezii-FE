@@ -45,7 +45,7 @@ const ChatSection = () => {
               ? {
                   ...msg,
                   loading: false,
-                  images: ["/ChatImageMockTest.png"],
+                  images: ["/ChatImageMockTest2.jpg"],
                 }
               : msg
           )
@@ -123,16 +123,25 @@ const ChatSection = () => {
               )}
               <div className="mb-3 flex flex-wrap gap-2">
                 {message.tags &&
-                  Object.entries(message.tags).map(([, values], index) => (
+                  Object.entries(message.tags).map(([key, values], index) => (
                     <React.Fragment key={index}>
-                      {values.map((value) => (
+                      {Array.isArray(values) ? (
+                        values.map((value) => (
+                          <div
+                            key={value}
+                            className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm flex items-center"
+                          >
+                            {value}
+                          </div>
+                        ))
+                      ) : (
                         <div
-                          key={value}
-                          className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm flex items-center"
+                          key={key}
+                          className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm flex items-center"
                         >
-                          {value}
+                          {values}
                         </div>
-                      ))}
+                      )}
                     </React.Fragment>
                   ))}
               </div>

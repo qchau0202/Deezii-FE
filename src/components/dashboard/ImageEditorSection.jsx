@@ -151,7 +151,7 @@ const ImageEditorSection = () => {
               className="flex items-center justify-center"
             >
               <img
-                src="/ChatImageMockTest.png"
+                src="/ChatImageMockTest2.jpg"
                 alt="Editor"
                 className="object-contain max-w-[50%] max-h-[50%]"
               />
