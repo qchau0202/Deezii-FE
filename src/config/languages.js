@@ -372,7 +372,7 @@ const en = {
         subtitle: "Here's what you've selected for your image generation:",
         description: "Review your choices and click generate when ready",
       },
-      advancedOptions: "Advanced Options (optional, you can skip)",
+      advancedOptions: "Advanced Options",
       advancedOptionsConfirmation: {
         title: "Continue with Advanced Options?",
         subtitle: "You've completed the basic questions. Would you like to continue with advanced options for more detailed customization?",
@@ -805,7 +805,7 @@ const vi = {
         subtitle: "Đây là những gì bạn đã chọn để tạo hình ảnh:",
         description: "Xem lại lựa chọn và nhấn tạo ảnh khi sẵn sàng",
       },
-      advancedOptions: "Tùy chọn nâng cao (tùy chọn, bạn có thể bỏ qua)",
+      advancedOptions: "Tùy chọn nâng cao",
       advancedOptionsConfirmation: {
         title: "Tiếp tục với tùy chọn nâng cao?",
         subtitle: "Bạn đã hoàn thành các câu hỏi cơ bản. Bạn có muốn tiếp tục với các tùy chọn nâng cao để tùy chỉnh chi tiết hơn không?",

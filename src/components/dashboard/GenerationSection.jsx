@@ -127,13 +127,15 @@ const GenerationSection = () => {
   const getLastStepNumber = () => {
     if (showReview) {
       // If we're at review step, use the flag to determine path
-      return userWentThroughAdvanced ? allStepKeys.length + 2 : basicQuestionsCount + 2;
+      return userWentThroughAdvanced ? 
+        basicQuestionsCount + 1 + (allStepKeys.length - basicQuestionsCount) + 1 : 
+        basicQuestionsCount + 2;
     } else if (currentStep >= basicQuestionsCount) {
       // User is in advanced section
-      return allStepKeys.length + 2; // +2 for confirmation and review steps
+      return basicQuestionsCount + 1 + (allStepKeys.length - basicQuestionsCount) + 1;
     } else {
       // User is in basic section
-      return basicQuestionsCount + 2; // +2 for confirmation and review steps
+      return basicQuestionsCount + 2;
     }
   };
 
@@ -144,7 +146,7 @@ const GenerationSection = () => {
     if (currentStep === basicQuestionsCount - 1) {
       // Show confirmation for advanced options
       setShowAdvancedConfirmation(true);
-    } else if (currentStep < lastStepNumber - 1) {
+    } else if (currentStep < allStepKeys.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
       // Move to review step
@@ -340,6 +342,16 @@ const GenerationSection = () => {
   };
 
   const renderStepContent = () => {
+    // Safety check to prevent out of bounds access
+    if (currentStep >= allStepKeys.length) {
+      console.error('Current step is out of bounds:', currentStep, 'Total steps:', allStepKeys.length);
+      return (
+        <motion.div className="text-center text-red-500">
+          <p>Error: Step out of bounds. Please refresh the page.</p>
+        </motion.div>
+      );
+    }
+
     const key = allStepKeys[currentStep];
     const currentOptionsGroup = t.options ? t.options[key] || {} : {};
     const currentSelectionForStep = selectedTags[key] || [];
@@ -423,7 +435,6 @@ const GenerationSection = () => {
   }));
 
   const isAdvancedStep = currentStep >= basicQuestionsCount; // Steps after basic questions are advanced
-  const currentStepNumber = currentStep + 1;
   
   // Dynamic step calculation based on user's path
   const getTotalSteps = () => {
@@ -433,25 +444,42 @@ const GenerationSection = () => {
     } else if (showReview) {
       // If we're at review step, check if user went through advanced options
       if (userWentThroughAdvanced) {
-        // User went through advanced options
-        return allStepKeys.length + 2; // +2 for confirmation and review steps
+        // User went through advanced options: basic + confirmation + advanced + review
+        return basicQuestionsCount + 1 + (allStepKeys.length - basicQuestionsCount) + 1;
       } else {
-        // User skipped advanced options
-        return basicQuestionsCount + 2; // +2 for confirmation and review steps
+        // User skipped advanced options: basic + confirmation + review
+        return basicQuestionsCount + 2;
       }
     } else {
       // Regular step - check if we're in advanced section
       if (currentStep >= basicQuestionsCount) {
         // We're in advanced section, so total includes all steps + confirmation + review
-        return allStepKeys.length + 2; // +2 for confirmation and review steps
+        return basicQuestionsCount + 1 + (allStepKeys.length - basicQuestionsCount) + 1;
       } else {
         // We're in basic section, so total is basic + confirmation + review
-        return basicQuestionsCount + 2; // +2 for confirmation and review steps
+        return basicQuestionsCount + 2;
       }
     }
   };
 
   const totalSteps = getTotalSteps();
+  
+  // Get the current step number accounting for confirmation and review steps
+  const getCurrentStepNumber = () => {
+    if (showAdvancedConfirmation) {
+      return basicQuestionsCount + 1; // Confirmation step
+    } else if (showReview) {
+      return totalSteps; // Review step is always the last
+    } else if (currentStep >= basicQuestionsCount) {
+      // Advanced step: basic steps + confirmation + advanced step number
+      return basicQuestionsCount + 1 + (currentStep - basicQuestionsCount + 1);
+    } else {
+      // Basic step
+      return currentStep + 1;
+    }
+  };
+  
+  const currentStepNumber = getCurrentStepNumber();
   const isLastStep = currentStep === lastStepNumber - 1; // -1 because currentStep is 0-based
 
   const renderAdvancedConfirmationStep = () => {
@@ -476,7 +504,7 @@ const GenerationSection = () => {
                 {t.advancedOptionsConfirmation.title}
               </h2>
               <p className="text-xs text-gray-500 mt-1">
-                {t.step.replace("{current}", basicQuestionsCount + 1).replace("{total}", totalSteps)}
+                {t.step.replace("{current}", currentStepNumber).replace("{total}", totalSteps)}
               </p>
             </motion.div>
             <motion.div
