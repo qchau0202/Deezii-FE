@@ -90,6 +90,8 @@ const GenerationSection = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [attachments, setAttachments] = useState([]);
   const [showReview, setShowReview] = useState(false);
+  const [showAdvancedConfirmation, setShowAdvancedConfirmation] = useState(false);
+  const [userWentThroughAdvanced, setUserWentThroughAdvanced] = useState(false);
   const { lang } = useLanguage();
   const { createGeneration } = useGeneration();
   const navigate = useNavigate();
@@ -97,6 +99,7 @@ const GenerationSection = () => {
   
   // Get step keys from language file
   const allStepKeys = t.steps || [];
+  const basicQuestionsCount = 7; // First 7 questions are basic
   
   const getTagLabel = (tag) => {
     const t_options = t.options || {};
@@ -120,8 +123,28 @@ const GenerationSection = () => {
     return stepMetadata.optionalSteps.includes(stepKey);
   };
 
+  // Get the actual last step number for the current path
+  const getLastStepNumber = () => {
+    if (showReview) {
+      // If we're at review step, use the flag to determine path
+      return userWentThroughAdvanced ? allStepKeys.length + 2 : basicQuestionsCount + 2;
+    } else if (currentStep >= basicQuestionsCount) {
+      // User is in advanced section
+      return allStepKeys.length + 2; // +2 for confirmation and review steps
+    } else {
+      // User is in basic section
+      return basicQuestionsCount + 2; // +2 for confirmation and review steps
+    }
+  };
+
+  const lastStepNumber = getLastStepNumber();
+
   const handleNextStep = () => {
-    if (currentStep < allStepKeys.length - 1) {
+    // Check if we're at the end of basic questions (before advanced options)
+    if (currentStep === basicQuestionsCount - 1) {
+      // Show confirmation for advanced options
+      setShowAdvancedConfirmation(true);
+    } else if (currentStep < lastStepNumber - 1) {
       setCurrentStep(currentStep + 1);
     } else {
       // Move to review step
@@ -132,9 +155,44 @@ const GenerationSection = () => {
   const handleBack = () => {
     if (showReview) {
       setShowReview(false);
+    } else if (showAdvancedConfirmation) {
+      // Go back to the last basic step
+      setShowAdvancedConfirmation(false);
+      setCurrentStep(basicQuestionsCount - 1);
     } else if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
+      // Check if we're at the first advanced step (right after confirmation)
+      if (currentStep === basicQuestionsCount) {
+        // Go back to confirmation step
+        setShowAdvancedConfirmation(true);
+      } else {
+        setCurrentStep(currentStep - 1);
+      }
     }
+  };
+
+  const handleContinueAdvanced = () => {
+    setUserWentThroughAdvanced(true);
+    setShowAdvancedConfirmation(false);
+    setCurrentStep(basicQuestionsCount); // Always start from first advanced step
+  };
+
+  const handleSkipAdvanced = () => {
+    // Clear any advanced options that were selected
+    const clearedSelectedTags = { ...selectedTags };
+    const clearedInputValues = { ...inputValues };
+    
+    // Remove all advanced options (steps after basicQuestionsCount)
+    for (let i = basicQuestionsCount; i < allStepKeys.length; i++) {
+      const stepKey = allStepKeys[i];
+      delete clearedSelectedTags[stepKey];
+      delete clearedInputValues[stepKey];
+    }
+    
+    setSelectedTags(clearedSelectedTags);
+    setInputValues(clearedInputValues);
+    setUserWentThroughAdvanced(false);
+    setShowAdvancedConfirmation(false);
+    setShowReview(true);
   };
 
   const canProceed = () => {
@@ -364,10 +422,114 @@ const GenerationSection = () => {
     value: value,
   }));
 
-  const isAdvancedStep = currentStep >= allStepKeys.length - 3; // Last 3 steps are advanced
+  const isAdvancedStep = currentStep >= basicQuestionsCount; // Steps after basic questions are advanced
   const currentStepNumber = currentStep + 1;
-  const totalSteps = allStepKeys.length; // We now have exactly 11 steps
-  const isLastStep = currentStep === allStepKeys.length - 1;
+  
+  // Dynamic step calculation based on user's path
+  const getTotalSteps = () => {
+    if (showAdvancedConfirmation) {
+      // If we're at confirmation step, total is basic questions + confirmation + review
+      return basicQuestionsCount + 2; // +2 for confirmation and review steps
+    } else if (showReview) {
+      // If we're at review step, check if user went through advanced options
+      if (userWentThroughAdvanced) {
+        // User went through advanced options
+        return allStepKeys.length + 2; // +2 for confirmation and review steps
+      } else {
+        // User skipped advanced options
+        return basicQuestionsCount + 2; // +2 for confirmation and review steps
+      }
+    } else {
+      // Regular step - check if we're in advanced section
+      if (currentStep >= basicQuestionsCount) {
+        // We're in advanced section, so total includes all steps + confirmation + review
+        return allStepKeys.length + 2; // +2 for confirmation and review steps
+      } else {
+        // We're in basic section, so total is basic + confirmation + review
+        return basicQuestionsCount + 2; // +2 for confirmation and review steps
+      }
+    }
+  };
+
+  const totalSteps = getTotalSteps();
+  const isLastStep = currentStep === lastStepNumber - 1; // -1 because currentStep is 0-based
+
+  const renderAdvancedConfirmationStep = () => {
+    return (
+      <motion.div
+        key="advanced-confirmation"
+        className="bg-white rounded-lg p-6 shadow-lg"
+        variants={cardVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+      >
+        <motion.div className="mb-6" variants={containerVariants}>
+          <div className="flex items-center justify-between mb-3">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4 }}
+              className="w-2/3"
+            >
+              <h2 className="text-xl font-semibold text-indigo-900">
+                {t.advancedOptionsConfirmation.title}
+              </h2>
+              <p className="text-xs text-gray-500 mt-1">
+                {t.step.replace("{current}", basicQuestionsCount + 1).replace("{total}", totalSteps)}
+              </p>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <button
+                onClick={handleBack}
+                className="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-1.5 rounded-md"
+              >
+                {t.back}
+              </button>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        <motion.div className="space-y-4" variants={containerVariants}>
+          <div className="text-center mb-6">
+            <h3 className="text-base font-medium text-gray-700 mb-2">
+              {t.advancedOptionsConfirmation.subtitle}
+            </h3>
+            <p className="text-sm text-gray-500 mb-2">
+              {t.advancedOptionsConfirmation.description}
+            </p>
+            <p className="text-xs text-gray-400">
+              {t.advancedOptionsConfirmation.note}
+            </p>
+          </div>
+        </motion.div>
+
+        <motion.div
+          className="flex justify-center space-x-4 mt-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+        >
+          <button
+            onClick={handleSkipAdvanced}
+            className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-md text-sm font-medium"
+          >
+            {t.advancedOptionsConfirmation.skip}
+          </button>
+          <button
+            onClick={handleContinueAdvanced}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-md text-sm font-medium"
+          >
+            {t.advancedOptionsConfirmation.continue}
+          </button>
+        </motion.div>
+      </motion.div>
+    );
+  };
 
   const renderReviewStep = () => {
     return (
@@ -391,7 +553,7 @@ const GenerationSection = () => {
                 {t.review.title}
               </h2>
               <p className="text-xs text-gray-500 mt-1">
-                {t.step.replace("{current}", totalSteps + 1).replace("{total}", totalSteps + 1)}
+                {t.step.replace("{current}", totalSteps).replace("{total}", totalSteps)}
               </p>
             </motion.div>
             <motion.div
@@ -463,6 +625,8 @@ const GenerationSection = () => {
         <AnimatePresence mode="wait">
           {showReview ? (
             renderReviewStep()
+          ) : showAdvancedConfirmation ? (
+            renderAdvancedConfirmationStep()
           ) : (
             <motion.div
               key={`step-${currentStep}`}
@@ -486,7 +650,7 @@ const GenerationSection = () => {
                     <p className="text-xs text-gray-500 mt-1">
                       {t.step
                         .replace("{current}", currentStepNumber)
-                        .replace("{total}", totalSteps + 1)}
+                        .replace("{total}", totalSteps)}
                     </p>
                   </motion.div>
                   {currentStep > 0 && (

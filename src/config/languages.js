@@ -373,6 +373,14 @@ const en = {
         description: "Review your choices and click generate when ready",
       },
       advancedOptions: "Advanced Options (optional, you can skip)",
+      advancedOptionsConfirmation: {
+        title: "Continue with Advanced Options?",
+        subtitle: "You've completed the basic questions. Would you like to continue with advanced options for more detailed customization?",
+        description: "Advanced options are optional and can help fine-tune your image generation",
+        continue: "Yes, Continue",
+        skip: "No, Skip to Generate",
+        note: "You can always go back to add more details later"
+      },
     },
     toolsSidebar: {
       generationSettings: "Generation Settings",
@@ -798,6 +806,14 @@ const vi = {
         description: "Xem lại lựa chọn và nhấn tạo ảnh khi sẵn sàng",
       },
       advancedOptions: "Tùy chọn nâng cao (tùy chọn, bạn có thể bỏ qua)",
+      advancedOptionsConfirmation: {
+        title: "Tiếp tục với tùy chọn nâng cao?",
+        subtitle: "Bạn đã hoàn thành các câu hỏi cơ bản. Bạn có muốn tiếp tục với các tùy chọn nâng cao để tùy chỉnh chi tiết hơn không?",
+        description: "Tùy chọn nâng cao là tùy chọn và có thể giúp tinh chỉnh việc tạo hình ảnh của bạn",
+        continue: "Có, Tiếp tục",
+        skip: "Không, Bỏ qua và Tạo ảnh",
+        note: "Bạn luôn có thể quay lại để thêm chi tiết sau"
+      },
     },
     toolsSidebar: {
       generationSettings: "Cài đặt tạo ảnh",
