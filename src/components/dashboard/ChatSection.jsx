@@ -33,20 +33,28 @@ const ChatSection = () => {
         tags: generationData.tags,
         attachments: generationData.attachments,
         images: [],
-        loading: true,
+        loading: false,
+        role: "user",
       };
-      setMessages((prev) => [...prev, newMessage]);
+      const aiPlaceholder = {
+        id: `${generationData.id}-ai`,
+        sender: "Deezii AI",
+        time: "Now",
+        content: "",
+        tags: {},
+        attachments: [],
+        images: [],
+        loading: true,
+        role: "ai",
+      };
+      setMessages((prev) => [...prev, newMessage, aiPlaceholder]);
       clearGenerationData();
 
       setTimeout(() => {
         setMessages((prevMessages) =>
           prevMessages.map((msg) =>
-            msg.id === newMessage.id
-              ? {
-                  ...msg,
-                  loading: false,
-                  images: ["/ChatImageMockTest2.jpg"],
-                }
+            msg.id === `${newMessage.id}-ai`
+              ? { ...msg, loading: false, images: ["/ChatImageMockTest2.jpg"] }
               : msg
           )
         );
@@ -60,8 +68,9 @@ const ChatSection = () => {
 
   const handleSendPrompt = () => {
     if (prompt.trim()) {
-      const newMessage = {
-        id: new Date().getTime(),
+      const userId = new Date().getTime();
+      const userMessage = {
+        id: userId,
         sender: "Chou",
         time: "Now",
         content: prompt,
@@ -69,9 +78,33 @@ const ChatSection = () => {
         attachments: [],
         images: [],
         loading: false,
+        role: "user",
       };
-      setMessages([...messages, newMessage]);
+
+      const aiPlaceholder = {
+        id: `${userId}-ai`,
+        sender: "Deezii AI",
+        time: "Now",
+        content: "",
+        tags: {},
+        attachments: [],
+        images: [],
+        loading: true,
+        role: "ai",
+      };
+
+      setMessages([...messages, userMessage, aiPlaceholder]);
       setPrompt("");
+
+      setTimeout(() => {
+        setMessages((prevMessages) =>
+          prevMessages.map((msg) =>
+            msg.id === `${userId}-ai`
+              ? { ...msg, loading: false, images: ["/ChatImageMockTest2.jpg"] }
+              : msg
+          )
+        );
+      }, 1200);
     }
   };
 
@@ -94,29 +127,30 @@ const ChatSection = () => {
           {messages.map((message) => (
             <div
               key={message.id}
-              className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm"
+              className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
             >
+              <div className={`${message.role === "user" ? "bg-indigo-600 text-white" : "bg-white text-indigo-900 border border-gray-200"} rounded-xl p-3 shadow-sm max-w-[80%]`}>
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center">
-                  <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
-                    <BsStars className="text-indigo-600" />
+                  <div className={`w-8 h-8 ${message.role === "user" ? "bg-white/20" : "bg-indigo-100"} rounded-full flex items-center justify-center mr-3`}>
+                    <BsStars className={`${message.role === "user" ? "text-white" : "text-indigo-600"}`} />
                   </div>
                   <div>
-                    <span className="font-semibold text-indigo-900">
+                    <span className={`font-semibold ${message.role === "user" ? "text-white" : "text-indigo-900"}`}>
                       {message.sender}
                     </span>
-                    <span className="text-xs text-gray-500 ml-2">
+                    <span className={`text-xs ml-2 ${message.role === "user" ? "text-white/80" : "text-gray-500"}`}>
                       {message.time}
                     </span>
                   </div>
                 </div>
               </div>
               {message.content && (
-                <div className="bg-gray-50 p-3 rounded-lg mb-3 border border-gray-100">
+                <div className={`${message.role === "user" ? "bg-white/10 border-white/20" : "bg-gray-50 border-gray-100"} p-3 rounded-lg border`}>
                   <div className="flex justify-between">
-                    <p className="text-gray-900">{message.content}</p>
+                    <p className={`${message.role === "user" ? "text-white" : "text-gray-900"}`}>{message.content}</p>
                     <Tooltip title="Copy Prompt">
-                      <CopyOutlined className="text-gray-400 hover:text-indigo-600 cursor-pointer ml-2" />
+                      <CopyOutlined className={`${message.role === "user" ? "text-white/80 hover:text-white" : "text-gray-400 hover:text-indigo-600"} cursor-pointer ml-2`} />
                     </Tooltip>
                   </div>
                 </div>
@@ -129,7 +163,7 @@ const ChatSection = () => {
                         values.map((value) => (
                           <div
                             key={value}
-                            className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm flex items-center"
+                            className={`${message.role === "user" ? "bg-white/20 text-white" : "bg-indigo-100 text-indigo-700"} px-3 py-1 rounded-full text-sm flex items-center`}
                           >
                             {value}
                           </div>
@@ -137,7 +171,7 @@ const ChatSection = () => {
                       ) : (
                         <div
                           key={key}
-                          className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm flex items-center"
+                          className={`${message.role === "user" ? "bg-white/20 text-white" : "bg-green-100 text-green-700"} px-3 py-1 rounded-full text-sm flex items-center`}
                         >
                           {values}
                         </div>
@@ -150,21 +184,21 @@ const ChatSection = () => {
                   message.attachments.map((file) => (
                     <div
                       key={file.name}
-                      className="bg-gray-100 rounded-lg px-3 py-1 text-sm flex items-center"
+                      className={`${message.role === "user" ? "bg-white/20 text-white" : "bg-gray-100"} rounded-lg px-3 py-1 text-sm flex items-center`}
                     >
                       {file.type === "image" ? (
                         <BsImage className="mr-2" />
                       ) : (
                         <BsPaperclip className="mr-2" />
                       )}
-                      <span>{file.name}</span>
+                      <span className={`${message.role === "user" ? "text-white" : "text-inherit"}`}>{file.name}</span>
                     </div>
                   ))}
               </div>
               {message.loading ? (
-                <div className="flex justify-center items-center mt-4 p-4 bg-gray-50 rounded-lg">
+                <div className={`flex ${message.role === "user" ? "justify-center" : "justify-start"} items-center mt-4 ${message.role === "user" ? "bg-white/10" : "bg-gray-50"} rounded-lg`}>
                   <Spin />
-                  <span className="ml-4 text-gray-500">
+                  <span className={`ml-4 ${message.role === "user" ? "text-white/80" : "text-gray-500"}`}>
                     Generating images, please wait...
                   </span>
                 </div>
@@ -198,6 +232,7 @@ const ChatSection = () => {
                   </div>
                 )
               )}
+              </div>
             </div>
           ))}
           <div ref={chatEndRef} />
