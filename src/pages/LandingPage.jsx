@@ -9,7 +9,7 @@ import HeroSection from "../components/landing/HeroSection";
 import ExploreSection from "../components/landing/ExploreSection";
 const LandingPage = () => {
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="bg-gray-50 text-gray-900">
       <Header />
       <HeroSection />
       <ExploreSection />

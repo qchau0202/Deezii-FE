@@ -62,46 +62,54 @@ const TrustedPartnersSection = () => {
     <section
       ref={sectionRef}
       id="collaboration-section"
-      className="h-screen flex flex-col justify-center bg-white py-20"
+      className="min-h-screen flex flex-col justify-center bg-white py-16 md:py-20"
     >
-      <div className="container mx-auto px-6 text-center">
-        <h2 className="text-4xl md:text-5xl font-extrabold mb-4 text-indigo-900">
-          {t.title}
-        </h2>
-        <p className="text-lg text-gray-600 mb-8 max-w-4xl mx-auto">
-          {t.description}
-        </p>
-        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 mb-8">
-          {partners.map((partner) => (
-            <div key={partner.id} className="p-4">
-              <img
-                src="https://placehold.co/200x200"
-                alt={partner.name}
-                className="h-12 md:h-16 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-              />
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-12 gap-6 text-center">
+          <div className="col-span-12">
+            <h2 className="text-2xl md:text-4xl font-extrabold mb-2 md:mb-4 text-indigo-900">
+              {t.title}
+            </h2>
+            <p className="text-sm md:text-lg text-gray-600 mb-6 md:mb-8 max-w-4xl mx-auto">
+              {t.description}
+            </p>
+          </div>
+          <div className="col-span-12">
+            <div className="grid grid-cols-12 gap-6 md:gap-8 items-center">
+              {partners.map((partner) => (
+                <div key={partner.id} className="col-span-6 sm:col-span-4 md:col-span-2 p-2">
+                  <img
+                    src="https://placehold.co/200x200"
+                    alt={partner.name}
+                    className="mx-auto h-10 sm:h-12 md:h-16 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                  />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div className="bg-indigo-50 rounded-2xl p-8 max-w-2xl mx-auto">
-          <p className="text-indigo-800 font-medium text-xl mb-2">{t.over}</p>
-          <p className="text-4xl font-bold text-indigo-600 mb-3">
-            {isVisible && (
-              <>
-                <CountUp
-                  from={0}
-                  to={500}
-                  separator=","
-                  direction="up"
-                  duration={1}
-                />
-                +
-              </>
-            )}
-            {!isVisible && "0"}
-          </p>
-          <p className="text-indigo-800 font-medium text-xl">
-            {t.designsCreated}
-          </p>
+          </div>
+          <div className="col-span-12">
+            <div className="bg-indigo-50 rounded-2xl p-6 md:p-8 max-w-2xl mx-auto">
+              <p className="text-indigo-800 font-medium text-lg md:text-xl mb-2">{t.over}</p>
+              <p className="text-3xl md:text-4xl font-bold text-indigo-600 mb-3">
+                {isVisible && (
+                  <>
+                    <CountUp
+                      from={0}
+                      to={500}
+                      separator="," 
+                      direction="up"
+                      duration={1}
+                    />
+                    +
+                  </>
+                )}
+                {!isVisible && "0"}
+              </p>
+              <p className="text-indigo-800 font-medium text-lg md:text-xl">
+                {t.designsCreated}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -7,6 +7,7 @@ import {
   SettingOutlined,
   UserOutlined,
   CheckOutlined,
+  MenuOutlined,
 } from "@ant-design/icons";
 import { Button, Dropdown } from "antd";
 import { FaUserCircle } from "react-icons/fa";
@@ -31,6 +32,7 @@ const LANGS = [
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeNav, setActiveNav] = useState("home");
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { lang, changeLanguage, resetLanguage } = useLanguage();
@@ -55,8 +57,20 @@ const Header = () => {
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
       setActiveNav(sectionId.replace("-section", ""));
+      setMobileOpen(false);
     }
   };
+
+  const NAV_ITEMS = [
+    { id: "explore", label: t.explore, sectionId: "explore-section" },
+    { id: "tutorial", label: t.tutorial, sectionId: "tutorial-section" },
+    { id: "collaboration", label: t.collaboration, sectionId: "collaboration-section" },
+    { id: "team", label: t.about, sectionId: "team-section" },
+    { id: "ourstory", label: t.ourstory, sectionId: "ourstory-section" },
+  ];
+
+  const navButtonBase =
+    "text-sm font-medium px-2 sm:px-3 py-2 transition-colors relative cursor-pointer";
 
   const userMenuItems = [
     {
@@ -144,11 +158,11 @@ const Header = () => {
     <div
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         isScrolled ? "bg-white shadow-lg" : "bg-transparent"
-      } py-4`}
+      } py-3 md:py-4`}
     >
       <div>
-        <div className="grid grid-cols-8 items-center px-2">
-          <div className="col-span-2">
+        <div className="grid grid-cols-12 items-center px-2">
+          <div className="col-span-6 md:col-span-3">
             <button
               onClick={() => scrollToSection("home-section")}
               className="text-xl sm:text-2xl md:text-3xl font-extrabold text-indigo-700 hover:text-indigo-600 transition-colors cursor-pointer"
@@ -157,83 +171,33 @@ const Header = () => {
             </button>
           </div>
 
-          <div className="col-span-4 flex justify-center space-x-2 sm:space-x-4 md:space-x-6 items-center">
-            <button
-              onClick={() => scrollToSection("explore-section")}
-              className={`text-xs sm:text-sm md:text-base font-medium px-2 sm:px-3 py-2 transition-colors relative cursor-pointer ${
-                activeNav === "explore"
-                  ? "text-indigo-600"
-                  : "text-gray-700 hover:text-indigo-600"
-              }`}
-            >
-              {t.explore}
-              {activeNav === "explore" && (
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600"></span>
-              )}
-            </button>
-            <button
-              onClick={() => scrollToSection("tutorial-section")}
-              className={`text-xs sm:text-sm md:text-base font-medium px-2 sm:px-3 py-2 transition-colors relative cursor-pointer ${
-                activeNav === "tutorial"
-                  ? "text-indigo-600"
-                  : "text-gray-700 hover:text-indigo-600"
-              }`}
-            >
-              {t.tutorial}
-              {activeNav === "tutorial" && (
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600"></span>
-              )}
-            </button>
-            <button
-              onClick={() => scrollToSection("collaboration-section")}
-              className={`text-xs sm:text-sm md:text-base font-medium px-2 sm:px-3 py-2 transition-colors relative cursor-pointer ${
-                activeNav === "collaboration"
-                  ? "text-indigo-600"
-                  : "text-gray-700 hover:text-indigo-600"
-              }`}
-            >
-              {t.collaboration}
-              {activeNav === "collaboration" && (
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600"></span>
-              )}
-            </button>
-
-            <button
-              onClick={() => scrollToSection("team-section")}
-              className={`text-xs sm:text-sm md:text-base font-medium px-2 sm:px-3 py-2 transition-colors relative cursor-pointer ${
-                activeNav === "team"
-                  ? "text-indigo-600"
-                  : "text-gray-700 hover:text-indigo-600"
-              }`}
-            >
-              {t.about}
-              {activeNav === "team" && (
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600"></span>
-              )}
-            </button>
-            <button
-              onClick={() => scrollToSection("ourstory-section")}
-              className={`text-xs sm:text-sm md:text-base font-medium px-2 sm:px-3 py-2 transition-colors relative cursor-pointer ${
-                activeNav === "ourstory"
-                  ? "text-indigo-600"
-                  : "text-gray-700 hover:text-indigo-600"
-              }`}
-            >
-              {t.ourstory}
-              {activeNav === "ourstory" && (
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600"></span>
-              )}
-            </button>
+          <div className="col-span-6 md:col-span-6 hidden md:flex justify-center space-x-2 sm:space-x-4 md:space-x-6 items-center">
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.sectionId)}
+                className={`${navButtonBase} ${
+                  activeNav === item.id
+                    ? "text-indigo-600"
+                    : "text-gray-700 hover:text-indigo-600"
+                }`}
+              >
+                {item.label}
+                {activeNav === item.id && (
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600"></span>
+                )}
+              </button>
+            ))}
           </div>
 
-          <div className="col-span-2 flex items-center justify-end gap-4">
+          <div className="col-span-6 md:col-span-3 flex items-center justify-end gap-2 sm:gap-4">
             <Dropdown
               menu={{ items: langMenuItems }}
               trigger={["click"]}
               placement="bottomRight"
             >
               <button
-                className="flex items-center px-2 py-1 bg-indigo-500 text-white rounded hover:bg-indigo-600 cursor-pointer"
+                className="flex items-center p-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 cursor-pointer"
                 tabIndex={0}
               >
                 <GlobalOutlined className="mr-1" />
@@ -260,13 +224,39 @@ const Header = () => {
             ) : (
               <button
                 onClick={() => navigate("/login")}
-                className="flex items-center px-2 py-1 bg-indigo-500 text-white rounded hover:bg-indigo-600 cursor-pointer"
+                className="flex items-center p-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 cursor-pointer"
               >
                 {t.login}
               </button>
             )}
+            <button
+              aria-label="Toggle menu"
+              onClick={() => setMobileOpen((v) => !v)}
+              className="md:hidden flex items-center p-2 rounded text-indigo-700 hover:bg-indigo-50 cursor-pointer"
+            >
+              <MenuOutlined />
+            </button>
           </div>
         </div>
+        {mobileOpen && (
+          <div className="md:hidden px-3 pb-3">
+            <div className="flex flex-col gap-1">
+              {NAV_ITEMS.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.sectionId)}
+                  className={`text-sm text-left px-3 py-2 rounded ${
+                    activeNav === item.id
+                      ? "text-indigo-700 bg-indigo-50"
+                      : "text-gray-700 hover:bg-gray-50"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -12,25 +12,27 @@ const HowItWorksSection = () => {
   return (
     <section
       id="tutorial-section"
-      className="h-screen flex flex-col justify-center items-center bg-indigo-900"
+      className="min-h-screen flex flex-col justify-center items-center bg-indigo-900 py-16"
     >
-      <div className="mx-auto px-6 text-center mt-8">
-        <h1 className="text-3xl md:text-4xl font-extrabold mb-4 text-white">
-          {title}
-        </h1>
-        <p className="text-lg text-gray-200 mb-8">
-          {t.description}
-        </p>
-        <div className="flex justify-center gap-6">
-          <div className="w-1/2 flex justify-center items-center">
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-12 gap-6 items-center">
+          <div className="col-span-12 text-center">
+            <h1 className="text-2xl md:text-4xl font-extrabold mb-3 md:mb-4 text-white">
+              {title}
+            </h1>
+            <p className="text-base md:text-lg text-gray-200 mb-6 md:mb-10">
+              {t.description}
+            </p>
+          </div>
+          <div className="col-span-12 md:col-span-6 flex justify-center">
             <img
               src="https://placehold.co/800x400"
               alt="AI Image Generation"
-              className="rounded-2xl shadow-lg"
+              className="rounded-2xl shadow-lg w-full max-w-2xl"
             />
           </div>
-          <div className="flex flex-col justify-center">
-            <div className="space-y-5">
+          <div className="col-span-12 md:col-span-6">
+            <div className="space-y-4 md:space-y-5">
               {t.steps.map((step, idx) => (
                 <div
                   key={idx}
