@@ -486,7 +486,7 @@ const GenerationSection = () => {
     return (
       <motion.div
         key="advanced-confirmation"
-        className="bg-white rounded-lg p-6 shadow-lg"
+        className="bg-white rounded-lg p-4 md:p-6 shadow-lg"
         variants={cardVariants}
         initial="initial"
         animate="animate"
@@ -500,7 +500,7 @@ const GenerationSection = () => {
               transition={{ duration: 0.4 }}
               className="w-2/3"
             >
-              <h2 className="text-xl font-semibold text-indigo-900">
+              <h2 className="text-lg md:text-xl font-semibold text-indigo-900">
                 {t.advancedOptionsConfirmation.title}
               </h2>
               <p className="text-xs text-gray-500 mt-1">
@@ -524,7 +524,7 @@ const GenerationSection = () => {
 
         <motion.div className="space-y-4" variants={containerVariants}>
           <div className="text-center mb-6">
-            <h3 className="text-base font-medium text-gray-700 mb-2">
+            <h3 className="text-sm md:text-base font-medium text-gray-700 mb-2">
               {t.advancedOptionsConfirmation.subtitle}
             </h3>
             <p className="text-sm text-gray-500 mb-2">
@@ -544,13 +544,13 @@ const GenerationSection = () => {
         >
           <button
             onClick={handleSkipAdvanced}
-            className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-md text-sm font-medium"
+            className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-md text-sm font-medium"
           >
             {t.advancedOptionsConfirmation.skip}
           </button>
           <button
             onClick={handleContinueAdvanced}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-md text-sm font-medium"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 md:px-6 md:py-3 rounded-md text-sm font-medium"
           >
             {t.advancedOptionsConfirmation.continue}
           </button>
@@ -563,7 +563,7 @@ const GenerationSection = () => {
     return (
       <motion.div
         key="review"
-        className="bg-white rounded-lg p-6 shadow-lg"
+        className="bg-white rounded-lg p-4 md:p-6 shadow-lg"
         variants={cardVariants}
         initial="initial"
         animate="animate"
@@ -577,7 +577,7 @@ const GenerationSection = () => {
               transition={{ duration: 0.4 }}
               className="w-2/3"
             >
-              <h2 className="text-xl font-semibold text-indigo-900">
+              <h2 className="text-lg md:text-xl font-semibold text-indigo-900">
                 {t.review.title}
               </h2>
               <p className="text-xs text-gray-500 mt-1">
@@ -601,7 +601,7 @@ const GenerationSection = () => {
 
         <motion.div className="space-y-3" variants={containerVariants}>
           <div className="text-center mb-4">
-            <h3 className="text-base font-medium text-gray-700 mb-2">
+            <h3 className="text-sm md:text-base font-medium text-gray-700 mb-2">
               {t.review.subtitle}
             </h3>
             <p className="text-xs text-gray-500">
@@ -626,14 +626,14 @@ const GenerationSection = () => {
         </motion.div>
 
         <motion.div
-          className="flex justify-end mt-6"
+          className="flex justify-end mt-4 md:mt-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}
         >
           <button
             onClick={handleGenerate}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-md text-sm font-medium"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 md:px-8 md:py-3 rounded-md text-sm font-medium"
           >
             {t.generate}
           </button>
@@ -644,12 +644,12 @@ const GenerationSection = () => {
 
   return (
     <motion.div
-      className="h-screen flex flex-col justify-center items-center bg-gray-50 p-4"
+      className="h-screen flex flex-col justify-center items-center bg-gray-50 p-2 md:p-4"
       variants={containerVariants}
       initial="initial"
       animate="animate"
     >
-      <div className="w-full max-w-2xl">
+      <div className="w-full max-w-xl md:max-w-2xl">
         <AnimatePresence mode="wait">
           {showReview ? (
             renderReviewStep()
@@ -658,7 +658,7 @@ const GenerationSection = () => {
           ) : (
             <motion.div
               key={`step-${currentStep}`}
-              className="bg-white rounded-lg p-6 shadow-lg"
+              className="bg-white rounded-lg p-4 md:p-6 shadow-lg"
               variants={cardVariants}
               initial="initial"
               animate="animate"
@@ -672,7 +672,7 @@ const GenerationSection = () => {
                     transition={{ duration: 0.4 }}
                     className="w-2/3"
                   >
-                    <h2 className="text-xl font-semibold text-indigo-900">
+                    <h2 className="text-lg md:text-xl font-semibold text-indigo-900">
                       {isAdvancedStep ? t.advancedOptions : t.questions[key]}
                     </h2>
                     <p className="text-xs text-gray-500 mt-1">
@@ -689,7 +689,7 @@ const GenerationSection = () => {
                     >
                       <button
                         onClick={handleBack}
-                        className="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-1.5 rounded-md"
+                        className="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-2.5 py-1.5 md:px-3 md:py-1.5 rounded-md"
                       >
                         {t.back}
                       </button>
@@ -697,14 +697,14 @@ const GenerationSection = () => {
                   )}
                 </div>
                 <motion.div
-                  className="flex flex-wrap gap-2 mb-3 min-h-[1.75rem]"
+                  className="flex flex-wrap gap-1.5 md:gap-2 mb-2 md:mb-3 min-h-[1.5rem] md:min-h-[1.75rem]"
                   variants={containerVariants}
                 >
                   <AnimatePresence>
                     {flatSelectedTags.map(({ stepKey, tag }) => (
                       <motion.div
                         key={tag}
-                        className="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full text-xs flex items-center"
+                        className="bg-indigo-100 text-indigo-700 px-1.5 py-0.5 md:px-2 rounded-full text-[10px] md:text-xs flex items-center"
                         variants={tagVariants}
                         initial="initial"
                         animate="animate"
@@ -713,7 +713,7 @@ const GenerationSection = () => {
                         <span>{getTagLabel(tag)}</span>
                         <button
                           onClick={() => handleRemoveTag(stepKey, tag)}
-                          className="ml-1.5 text-indigo-500 hover:text-indigo-800"
+                          className="ml-1 text-indigo-500 hover:text-indigo-800"
                         >
                           <BsX />
                         </button>
@@ -722,7 +722,7 @@ const GenerationSection = () => {
                     {flatInputValues.map(({ stepKey, value }) => (
                       <motion.div
                         key={stepKey}
-                        className="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs flex items-center"
+                        className="bg-green-100 text-green-700 px-1.5 py-0.5 md:px-2 rounded-full text-[10px] md:text-xs flex items-center"
                         variants={tagVariants}
                         initial="initial"
                         animate="animate"
@@ -735,7 +735,7 @@ const GenerationSection = () => {
                             delete newInputValues[stepKey];
                             setInputValues(newInputValues);
                           }}
-                          className="ml-1.5 text-green-500 hover:text-green-800"
+                          className="ml-1 text-green-500 hover:text-green-800"
                         >
                           <BsX />
                         </button>
@@ -748,7 +748,7 @@ const GenerationSection = () => {
               {renderStepContent()}
 
               <motion.div
-                className="flex justify-between mt-6"
+                className="flex justify-between mt-4 md:mt-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.2 }}
@@ -760,7 +760,7 @@ const GenerationSection = () => {
                   <button
                     onClick={handleNextStep}
                     disabled={!canProceed()}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >
                     {isLastStep ? "Review" : "Next"}
                   </button>

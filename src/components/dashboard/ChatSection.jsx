@@ -129,7 +129,7 @@ const ChatSection = () => {
               key={message.id}
               className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
             >
-              <div className={`${message.role === "user" ? "bg-indigo-600 text-white" : "bg-white text-indigo-900 border border-gray-200"} rounded-xl p-3 shadow-sm max-w-[80%]`}>
+              <div className={`${message.role === "user" ? "bg-indigo-600 text-white" : "bg-white text-indigo-900 border border-gray-200"} rounded-xl p-3 shadow-sm max-w-[90%] md:max-w-[80%]`}>
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center">
                   <div className={`w-8 h-8 ${message.role === "user" ? "bg-white/20" : "bg-indigo-100"} rounded-full flex items-center justify-center mr-3`}>
@@ -205,7 +205,7 @@ const ChatSection = () => {
               ) : (
                 message.images &&
                 message.images.length > 0 && (
-                  <div className="grid grid-cols-2 gap-3 mt-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
                     {message.images.map((img, idx) => (
                       <div key={idx} className="relative group">
                         <img
