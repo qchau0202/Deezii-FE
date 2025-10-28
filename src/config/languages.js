@@ -108,8 +108,8 @@ const en = {
           role: "Leader",
         },
         {
-          id: "hien",
-          name: "Nguyen Thi Thu Hien",
+          id: "thuong",
+          name: "Doan Uyen Thuong",
           description: "Marketing & Design",
           role: "Marketing & Design",
         },
@@ -537,8 +537,8 @@ const vi = {
           role: "Leader",
         },
         {
-          id: "hien",
-          name: "Nguyễn Thị Thu Hiền",
+          id: "thuong",
+          name: "Đoàn Uyên Thương",
           description: "Phụ trách Marketing & Thiết kế",
           role: "Marketing & Design",
         },

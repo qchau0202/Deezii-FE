@@ -58,24 +58,29 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="grid grid-cols-12 w-full min-h-screen bg-gray-50 text-indigo-900">
-      <div className="col-span-12">
-        <NavigationSidebar
-          selectedItem={selectedItem}
-          onNavigate={handleNavigate}
-          collapsed={navCollapsed}
-          onToggleCollapse={toggleNavCollapse}
-        />
+    <div className="flex w-full min-h-screen bg-gray-50 text-indigo-900">
+      {/* Left Sidebar */}
+      <NavigationSidebar
+        selectedItem={selectedItem}
+        onNavigate={handleNavigate}
+        collapsed={navCollapsed}
+        onToggleCollapse={toggleNavCollapse}
+      />
+      
+      {/* Main Content Area */}
+      <div className="flex-1 flex">
+        <main className="flex-1 min-w-0 min-h-screen overflow-auto">
+          <Outlet />
+        </main>
+        
+        {/* Right Sidebar */}
+        <aside className="hidden md:block w-80 h-screen sticky top-0 border-l border-gray-100 bg-white">
+          <ToolsSidebar
+            collapsed={sidebarCollapsed}
+            onCollapse={setSidebarCollapsed}
+          />
+        </aside>
       </div>
-      <main className="col-span-12 md:col-span-9 lg:col-span-9 min-w-0 min-h-[60vh] overflow-auto">
-        <Outlet />
-      </main>
-      <aside className="hidden md:block md:col-span-3 lg:col-span-3 md:h-[calc(100vh-56px)] md:sticky md:top-14 md:self-start border-l border-gray-100 bg-white">
-        <ToolsSidebar
-          collapsed={sidebarCollapsed}
-          onCollapse={setSidebarCollapsed}
-        />
-      </aside>
     </div>
   );
 };

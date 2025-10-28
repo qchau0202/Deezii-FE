@@ -1,4 +1,4 @@
-// import { useState } from "react";
+import { useState } from "react";
 import { Dropdown, Tooltip } from "antd";
 import {
   DownOutlined,
@@ -35,37 +35,6 @@ const NavigationSidebar = ({
   const navMain = nav.main || {};
   const navDiscover = nav.discover || {};
   const navSupport = nav.support || {};
-
-  // const profileMenu = (
-  //   <Menu className="bg-white shadow-lg rounded-lg border border-gray-200">
-  //     <Menu.Item key="1" icon={<BsPerson className="text-indigo-600" />}>
-  //       <span className="text-indigo-900">{t.profile.profile}</span>
-  //     </Menu.Item>
-  //     <Menu.Item key="2" icon={<BellOutlined className="text-indigo-600" />}>
-  //       <span className="text-indigo-900">{t.profile.notifications}</span>
-  //     </Menu.Item>
-  //     <Menu.Item key="3" icon={<SettingOutlined className="text-indigo-600" />}>
-  //       <span className="text-indigo-900">{t.profile.settings}</span>
-  //     </Menu.Item>
-  //     <Menu.Item key="4" icon={<LogoutOutlined className="text-red-600" />}>
-  //       <span className="text-red-600">{t.profile.logout}</span>
-  //     </Menu.Item>
-  //   </Menu>
-  // );
-
-  const NavButton = ({ itemName, icon, tooltipText, isGradient = false }) => (
-    <Tooltip title={tooltipText} placement="bottom">
-      <button
-        className={`flex items-center px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-200 cursor-pointer whitespace-nowrap ${
-          isGradient ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg" : "text-gray-600 hover:bg-indigo-50"
-        }`}
-        onClick={() => onNavigate(itemName)}
-      >
-        <span className="mr-2">{icon}</span>
-        <span className="hidden sm:inline">{tooltipText}</span>
-      </button>
-    </Tooltip>
-  );
 
   const navMenuItems = [
     {
@@ -112,39 +81,96 @@ const NavigationSidebar = ({
     },
   ];
 
+  const NavItem = ({ item, isSelected }) => (
+    <button
+      onClick={() => onNavigate(item.key)}
+      className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+        isSelected
+          ? "bg-indigo-100 text-indigo-700 border-l-4 border-indigo-600"
+          : "text-gray-600 hover:bg-indigo-50 hover:text-indigo-700"
+      }`}
+    >
+      <span className="mr-3">{item.icon}</span>
+      <span className={collapsed ? "hidden" : ""}>{item.label}</span>
+    </button>
+  );
+
   return (
-    <div className="w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 sticky top-0 z-30 shadow border-b border-gray-200">
-      <div className="max-w-full px-2 sm:px-4">
-        <div className="flex items-center justify-between py-2 gap-2">
-          <div className="flex items-center gap-2">
-            <Dropdown
-              placement="bottomLeft"
-              trigger={["click"]}
-              menu={{
-                items: navMenuItems,
-                onClick: ({ key }) => {
-                  const found = navMenuItems.find((i) => i.key === key);
-                  if (found && found.onClick) found.onClick();
-                },
-              }}
-            >
-              <button className="flex items-center gap-2 p-2 rounded-lg text-indigo-700 hover:bg-indigo-50 cursor-pointer" aria-label="Open menu">
-                <AiOutlineMenuUnfold size={22} />
-              </button>
-            </Dropdown>
-          </div>
-          <div>
-            <Dropdown placement="bottomRight" trigger={["click"]}>
-              <div className="flex items-center p-2 bg-indigo-50 rounded-lg text-indigo-900 hover:bg-indigo-100 transition-colors cursor-pointer">
-                <div className="w-8 h-8 bg-indigo-200 rounded-full flex items-center justify-center mr-2">
-                  <BsPerson className="text-indigo-700" />
-                </div>
-                <span className="font-medium hidden md:inline">Chou</span>
-                <DownOutlined className="text-indigo-600 hidden md:inline" />
+    <div className={`bg-white border-r border-gray-200 transition-all duration-300 ${
+      collapsed ? "w-16" : "w-64"
+    } h-screen sticky top-0 z-30 flex flex-col`}>
+      {/* Header */}
+      <div className="p-4 border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          {!collapsed && (
+            <div className="flex items-center">
+              <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center mr-3">
+                <BsStars className="text-white" size={16} />
               </div>
-            </Dropdown>
-          </div>
+              <span className="font-bold text-indigo-900">Deezii</span>
+            </div>
+          )}
+          <button
+            onClick={onToggleCollapse}
+            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            {collapsed ? <AiOutlineMenuUnfold size={18} /> : <AiOutlineMenuFold size={18} />}
+          </button>
         </div>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 p-4 space-y-1">
+        {navMenuItems.map((item) => (
+          <NavItem
+            key={item.key}
+            item={item}
+            isSelected={selectedItem === item.key}
+          />
+        ))}
+      </nav>
+
+      {/* User Profile */}
+      <div className="p-4 border-t border-gray-200">
+        <Dropdown
+          placement="topRight"
+          trigger={["click"]}
+          menu={{
+            items: [
+              {
+                key: "profile",
+                label: "Profile",
+                icon: <BsPerson />,
+              },
+              {
+                key: "settings",
+                label: "Settings",
+                icon: <SettingOutlined />,
+              },
+              {
+                key: "logout",
+                label: "Logout",
+                icon: <LogoutOutlined />,
+                danger: true,
+              },
+            ],
+          }}
+        >
+          <div className="flex items-center p-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+            <div className="w-8 h-8 bg-indigo-200 rounded-full flex items-center justify-center mr-3">
+              <BsPerson className="text-indigo-700" />
+            </div>
+            {!collapsed && (
+              <>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-900">Chou</p>
+                  <p className="text-xs text-gray-500">Free Plan</p>
+                </div>
+                <DownOutlined className="text-gray-400" size={12} />
+              </>
+            )}
+          </div>
+        </Dropdown>
       </div>
     </div>
   );
