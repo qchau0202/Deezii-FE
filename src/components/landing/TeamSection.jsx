@@ -56,38 +56,38 @@ const TeamSection = () => {
             </p>
           </div>
           <div className="col-span-12">
-            <div className="grid grid-cols-12 gap-4 md:gap-6 justify-items-center">
+            <div className="flex flex-wrap justify-center gap-2 md:gap-4">
               {teamMembers.map((member) => (
-                <div key={member.id} className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
-                  <div className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 max-w-[18rem] mx-auto">
-                    <div className="p-4 md:p-6 text-center flex flex-col items-center">
-                      <div className="w-24 h-24 md:w-32 md:h-32 mb-4">
+                <div key={member.id} className="flex-shrink-0">
+                  <div className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 w-48 md:w-56">
+                    <div className="p-3 md:p-4 text-center flex flex-col items-center">
+                      <div className="w-16 h-16 md:w-20 md:h-20 mb-2">
                         <img
                           src={member.image}
                           alt={member.name}
                           className="w-full h-full object-cover rounded-full shadow-md"
                         />
                       </div>
-                      <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-2">
+                      <h3 className="text-sm md:text-base font-bold text-gray-800 mb-1">
                         {member.name}
                       </h3>
                       <span
-                        className={`px-3 py-1 rounded-full text-white text-xs md:text-sm font-semibold ${member.roleColor} mb-3`}
+                        className={`px-2 py-0.5 rounded-full text-white text-xs font-semibold ${member.roleColor} mb-2`}
                       >
                         {member.role}
                       </span>
-                      <p className="text-gray-600 text-xs md:text-sm h-16">
+                      <p className="text-gray-600 text-xs h-12 mb-2">
                         {member.description}
                       </p>
-                      <div className="flex justify-center gap-3">
+                      <div className="flex justify-center gap-2">
                         <a href="#" className="text-gray-400 hover:text-indigo-500 transition-colors">
-                          <FaFacebookF size={18} />
+                          <FaFacebookF size={14} />
                         </a>
                         <a href="#" className="text-gray-400 hover:text-indigo-500 transition-colors">
-                          <FaInstagram size={18} />
+                          <FaInstagram size={14} />
                         </a>
                         <a href="#" className="text-gray-400 hover:text-indigo-500 transition-colors">
-                          <FaLinkedinIn size={18} />
+                          <FaLinkedinIn size={14} />
                         </a>
                       </div>
                     </div>
