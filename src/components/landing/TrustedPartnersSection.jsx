@@ -35,26 +35,32 @@ const TrustedPartnersSection = () => {
     {
       id: 1,
       name: "Partner 1",
+      image: "/company-mock-icon-1.png",
     },
     {
       id: 2,
       name: "Partner 2",
+      image: "/company-mock-icon-2.png",
     },
     {
       id: 3,
       name: "Partner 3",
+      image: "/company-mock-icon-3.png",
     },
     {
       id: 4,
       name: "Partner 4",
+      image: "/company-mock-icon-1.png",
     },
     {
       id: 5,
       name: "Partner 5",
+      image: "/company-mock-icon-2.png",
     },
     {
       id: 6,
       name: "Partner 6",
+      image: "/company-mock-icon-3.png",
     },
   ];
 
@@ -79,9 +85,9 @@ const TrustedPartnersSection = () => {
               {partners.map((partner) => (
                 <div key={partner.id} className="col-span-6 sm:col-span-4 md:col-span-2 p-2">
                   <img
-                    src="https://placehold.co/200x200"
+                    src={partner.image}
                     alt={partner.name}
-                    className="mx-auto h-10 sm:h-12 md:h-16 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                    className="mx-auto h-10 sm:h-12 md:h-16"
                   />
                 </div>
               ))}
