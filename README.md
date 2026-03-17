@@ -3,5 +3,5 @@ Deezii is an AI Design Assistant platform built for Vietnamese users, helping th
 
 ## Web screenshots
 
-![App Screenshot](/deezii-chat)
-![App Screenshot](/deezii-landing)
+![deezii chat](/public/deezii-chat.jpg)
+![deezii landing page](/public/deezii-landing.jpg)
